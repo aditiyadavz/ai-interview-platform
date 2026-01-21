@@ -1,0 +1,121 @@
+/* ===== INTERVIEW SETUP PAGE ===== */
+.interview-setup {
+  min-height: 100vh;
+  padding: 80px 10%;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* TITLE */
+.interview-setup h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.interview-setup p {
+  font-size: 16px;
+  opacity: 0.85;
+  max-width: 600px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* GRID */
+.setup-grid {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+/* CARD */
+.setup-card {
+  background: rgba(27, 42, 50, 0.9);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+/* CARD TITLE */
+.setup-card h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #00ffc6;
+}
+
+/* CHECK LIST */
+.setup-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+
+.setup-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: #00ffc6;
+  cursor: pointer;
+}
+
+/* INSTRUCTIONS */
+.setup-card ul {
+  padding-left: 18px;
+  line-height: 1.7;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.setup-card li {
+  margin-bottom: 8px;
+}
+
+/* BUTTON */
+.join-btn {
+  width: 280px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #00ffc6;
+  color: #000;
+}
+
+.join-btn:disabled {
+  background: rgba(255, 255, 255, 0.25);
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.join-btn:not(:disabled):hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 255, 198, 0.35);
+}
+
+/* FOOTER NOTE */
+.setup-note {
+  margin-top: 25px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .interview-setup {
+    padding: 60px 6%;
+  }
+
+  .interview-setup h1 {
+    font-size: 34px;
+  }
+}
