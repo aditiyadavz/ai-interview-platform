@@ -1,54 +1,53 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isAuth = localStorage.getItem("isAuth");
+  const isAuth = localStorage.getItem("isAuthenticated");
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuth");
+    localStorage.removeItem("isAuthenticated");
     navigate("/login");
   };
 
   return (
     <nav className="navbar">
-      <div className="logo">AI Interview</div>
+      {/* Logo */}
+      <div className="nav-logo">
+        <Link to="/">AI<span>Interview</span></Link>
+      </div>
 
-      <ul className="nav-links">
-        <li className={location.pathname === "/" ? "active" : ""}>
-          <Link to="/">Home</Link>
-        </li>
-        <li className={location.pathname === "/contact" ? "active" : ""}>
-          <Link to="/contact">Contact</Link>
-        </li>
+      {/* Right side */}
+      <div className="nav-right">
+        {/* Navigation links */}
+        <ul className="nav-links">
+          <li><NavLink to="/" end>Home</NavLink></li>
+          <li><NavLink to="/roles">Roles</NavLink></li>
+          <li><NavLink to="/contact">Contact</NavLink></li>
 
-        {isAuth ? (
-          <>
-            <li className={location.pathname === "/dashboard" ? "active" : ""}>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <button className="btn logout-btn" onClick={handleLogout}>
-                Logout
-              </button>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <Link to="/login" className="btn login">
+          {isAuth && (
+            <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+          )}
+        </ul>
+
+        {/* Auth buttons */}
+        <div className="nav-actions">
+          {isAuth ? (
+            <button className="btn-login" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className="btn-login">
                 Login
               </Link>
-            </li>
-            <li>
-              <Link to="/signup" className="btn signup">
+              <Link to="/signup" className="btn-signup">
                 Signup
               </Link>
-            </li>
-          </>
-        )}
-      </ul>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 };

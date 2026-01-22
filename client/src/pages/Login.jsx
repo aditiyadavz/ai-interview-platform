@@ -1,15 +1,12 @@
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/auth.css";
-import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    // TEMP auth (replace with backend later)
-    localStorage.setItem("isAuth", "true");
-
+    localStorage.setItem("isAuthenticated", "true");
     navigate("/dashboard");
   };
 
@@ -22,10 +19,7 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <input type="email" placeholder="Email" required />
           <input type="password" placeholder="Password" required />
-
-          <button type="submit" className="auth-btn">
-            Login
-          </button>
+          <button className="auth-btn">Login</button>
         </form>
 
         <span className="auth-footer">

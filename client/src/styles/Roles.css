@@ -1,161 +1,114 @@
-/* ====== PAGE ====== */
 .roles-container {
   min-height: 100vh;
-  padding: 60px 8%;
+  padding: 80px 6%;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
+  color: #ffffff;
   text-align: center;
 }
 
-/* TITLE */
 .roles-container h1 {
-  font-size: 42px;
-  margin-bottom: 12px;
-}
-
-.roles-container p {
-  max-width: 600px;
-  margin: 0 auto 50px;
-  font-size: 16px;
-  opacity: 0.85;
-  line-height: 1.6;
-}
-
-/* ====== GRID ====== */
-.roles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  justify-items: center; /* center cards */
-}
-
-/* ====== SQUARE CARD ====== */
-.role-card {
-  background: #1b2a32;
-  border-radius: 18px;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 380px;     /* instead of aspect-ratio */
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: visible;    /* allow content */
-}
-
-.roles-container {
-  min-height: 100vh;
-  padding: 60px 8% 100px;
-}
-
-.role-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 22px 45px rgba(0, 255, 200, 0.25);
-}
-
-/* CONTENT FLEX */
-.role-card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;.role-card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  overflow: visible; /* changed from auto to visible */
-}
-}
-
-/* ICON */
-.role-icon {
-  font-size: 40px;
+  font-size: clamp(28px, 4vw, 42px);
   margin-bottom: 10px;
 }
 
-/* TITLE */
+.roles-container p {
+  max-width: 650px;
+  margin: 0 auto 50px;
+  opacity: 0.85;
+}
+
+/* GRID */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  align-items: stretch;
+}
+
+/* CARD */
+.role-card {
+  background: #1b2a32;
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+}
+
+.role-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 45px rgba(0,255,200,0.25);
+}
+
+/* HEADER */
+.role-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-icon {
+  font-size: 34px;
+}
+
 .role-card h2 {
   font-size: 18px;
-  margin-bottom: 6px;
 }
 
 /* DESCRIPTION */
 .role-desc {
   font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 10px;
-  line-height: 1.5;
+  opacity: 0.9;
 }
 
 /* TOPICS */
 .role-details {
   list-style: none;
   padding: 0;
-  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .role-details li {
-  font-size: 13px;
-  opacity: 0.85;
-  margin-bottom: 4px;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(0,255,198,0.15);
   color: #00ffc6;
 }
 
-/* LEVEL + DURATION */
+/* META */
 .role-meta {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  opacity: 0.8;
-  margin-bottom: 10px;
+  font-size: 12px;
+  opacity: 0.85;
 }
 
-/* BUTTONS */
-.role-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.role-actions button {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
+/* BUTTON */
+.role-btn {
+  margin-top: auto;
+  padding: 10px;
+  border-radius: 10px;
   border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.25s ease;
-}
-
-.role-actions button:first-child {
   background: #00ffc6;
   color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
-.role-actions button:first-child:hover {
+.role-btn:hover {
   background: #00d6a5;
-  transform: scale(1.05);
-}
-
-.role-actions button.secondary {
-  background: transparent;
-  color: #00ffc6;
-  border: 1px solid #00ffc6;
-}
-
-.role-actions button.secondary:hover {
-  background: rgba(0, 255, 198, 0.1);
   transform: scale(1.03);
 }
 
-/* ====== RESPONSIVE ====== */
-@media (max-width: 768px) {
-  .roles-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .role-card {
-    aspect-ratio: auto; /* auto for mobile so content fits */
+/* MOBILE */
+@media (max-width: 600px) {
+  .roles-container {
+    padding: 60px 20px;
   }
 }

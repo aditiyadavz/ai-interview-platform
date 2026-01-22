@@ -33,9 +33,10 @@ const Dashboard = () => {
         <div className="dashboard-card primary">
           <h3>Start New Interview</h3>
           <p>Select interview type and begin practice.</p>
-          <button onClick={() => navigate("/interview-setup")}>
+          <button onClick={() => navigate("/roles")}>
             Start Interview
           </button>
+
         </div>
       </div>
     </div>

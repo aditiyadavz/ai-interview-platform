@@ -8,15 +8,17 @@ const Roles = () => {
     {
       icon: "💻",
       title: "Frontend Developer",
-      desc: "Practice UI-based interviews focusing on modern frontend skills.",
-      topics: ["React & Hooks", "JavaScript", "HTML & CSS"],
+      roleKey: "frontend",
+      desc: "UI-based interviews focusing on modern frontend skills.",
+      topics: ["React", "JavaScript", "HTML & CSS"],
       level: "Beginner – Intermediate",
       duration: "20–30 mins",
     },
     {
       icon: "🖥",
       title: "Backend Developer",
-      desc: "Backend interviews covering APIs, databases, and logic building.",
+      roleKey: "backend",
+      desc: "APIs, databases, and server-side logic interviews.",
       topics: ["Node.js", "Java", "Databases"],
       level: "Intermediate",
       duration: "30 mins",
@@ -24,7 +26,8 @@ const Roles = () => {
     {
       icon: "📘",
       title: "DSA / Coding",
-      desc: "Coding interviews focused on problem-solving and algorithms.",
+      roleKey: "dsa",
+      desc: "Problem solving & algorithm-focused interviews.",
       topics: ["Arrays", "Trees", "Graphs"],
       level: "Medium – Hard",
       duration: "45 mins",
@@ -32,56 +35,47 @@ const Roles = () => {
     {
       icon: "🧑‍💼",
       title: "HR Interview",
-      desc: "Behavioral interviews to test communication and confidence.",
-      topics: ["HR", "Behavioral", "Situational Questions"],
+      roleKey: "hr",
+      desc: "Behavioral and situational interview practice.",
+      topics: ["Communication", "HR Questions"],
       level: "Easy",
       duration: "15–20 mins",
     },
   ];
 
-  const handleStartInterview = (roleTitle) => {
-    navigate("/interview-setup", {
-      state: { role: roleTitle },
-    });
-  };
-
   return (
     <div className="roles-container">
       <h1>Select Interview Type</h1>
-      <p>
-        Choose the interview you want to practice and start with AI-driven
-        feedback.
-      </p>
+      <p>Choose your interview track and prepare with AI-driven feedback.</p>
 
       <div className="roles-grid">
-        {roles.map((role, index) => (
-          <div className="role-card" key={index}>
-            <div className="role-icon">{role.icon}</div>
-
-            <div className="role-card-content">
+        {roles.map((role) => (
+          <div className="role-card" key={role.roleKey}>
+            <div className="role-header">
+              <span className="role-icon">{role.icon}</span>
               <h2>{role.title}</h2>
-              <p className="role-desc">{role.desc}</p>
-
-              <ul className="role-details">
-                {role.topics.map((topic, idx) => (
-                  <li key={idx}>{topic}</li>
-                ))}
-              </ul>
-
-              <div className="role-meta">
-                <span>Level: {role.level}</span>
-                <span>{role.duration}</span>
-              </div>
-
-              <div className="role-actions">
-                <button
-                  onClick={() => handleStartInterview(role.title)}
-                >
-                  Start Interview
-                </button>
-                <button className="secondary">View Syllabus</button>
-              </div>
             </div>
+
+            <p className="role-desc">{role.desc}</p>
+
+            <ul className="role-details">
+              {role.topics.map((topic) => (
+                <li key={topic}>{topic}</li>
+              ))}
+            </ul>
+
+            <div className="role-meta">
+              <span>{role.level}</span>
+              <span>{role.duration}</span>
+            </div>
+
+            {/* LINK TO INTERVIEW SETUP */}
+            <button
+              className="role-btn"
+              onClick={() => navigate(`/interview-setup/${role.roleKey}`)}
+            >
+              Start Interview
+            </button>
           </div>
         ))}
       </div>

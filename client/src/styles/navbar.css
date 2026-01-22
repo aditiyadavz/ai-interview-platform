@@ -1,166 +1,160 @@
-/* Full-width navbar with gradient background */
+/* ===============================
+   NAVBAR CONTAINER
+================================ */
 .navbar {
+  width: 100%;
+  height: 70px;
+  padding: 0 40px;
+
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px 50px;
-  background: linear-gradient(90deg, #1f2c34, #23303c); /* subtle dark gradient */
+  justify-content: space-between;
+
+  background: rgba(15, 32, 39, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+
   position: sticky;
   top: 0;
-  z-index: 100;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
 }
 
-/* Logo */
-.logo {
-  font-size: 1.8rem;
+/* ===============================
+   LOGO
+================================ */
+.nav-logo a {
+  font-size: 24px;
   font-weight: 700;
-  color: #fff;
-  cursor: pointer;
+  color: #ffffff;
+  text-decoration: none;
 }
 
-/* Nav links */
+.nav-logo span {
+  color: #00e5ff;
+}
+
+/* ===============================
+   RIGHT SECTION
+================================ */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+/* ===============================
+   NAV LINKS
+================================ */
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 25px;
-  align-items: center;
+  gap: 22px;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links li {
-  position: relative;
-}
-
-/* Normal links */
-.nav-links li a {
+.nav-links a {
   text-decoration: none;
-  color: #ffffffaa;
+  color: #cfd8dc;
+  font-size: 15px;
   font-weight: 500;
-  padding: 8px 0;
-  transition: all 0.3s ease;
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.3s ease;
 }
 
-/* Hover underline animation for nav links only */
-.nav-links li a::after {
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+/* underline animation */
+.nav-links a::after {
   content: "";
   position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -2px;
   left: 0;
-  background: #00bfa6; /* teal accent */
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: #00e5ff;
   transition: width 0.3s ease;
 }
 
-.nav-links li a:hover::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
   width: 100%;
 }
 
-/* Active page link */
-.nav-links li.active a {
-  color: #00bfa6; /* active link color */
+/* active link */
+.nav-links a.active {
+  color: #00e5ff;
 }
 
-.nav-links li.active a::after {
-  width: 100%;
+/* ===============================
+   AUTH BUTTONS
+================================ */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.nav-links li a:not(.btn)::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -2px;
-  left: 0;
-  background: #00bfa6; /* teal accent */
-  transition: width 0.3s ease;
-}
+/* OUTLINED PILL (Login / Logout) */
+.btn-login {
+  padding: 8px 22px;
+  border-radius: 999px;
 
-.nav-links li a:not(.btn):hover::after {
-  width: 100%;
-}
+  border: 1.5px solid #00e5ff;
+  background: transparent;
 
-/* Buttons */
-.btn {
-  padding: 14px 36px; /* increased width */
-  min-width: 120px;   /* ensures buttons are always wide enough */
-  border-radius: 999px; /* pill-shaped */
-  font-weight: 600;
-  transition: all 0.3s ease;
-  text-align: center;
-  cursor: pointer;
+  color: #00e5ff;
+  font-size: 14px;
+  font-weight: 500;
   text-decoration: none;
-  display: inline-block;
-  text-align: center;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
 }
 
-/* Login button */
-.btn.login {
-  background: transparent;
-  border: 2px solid #00bfa6;
-  color: #00bfa6;
+.btn-login:hover {
+  background: rgba(0, 229, 255, 0.15);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+  transform: translateY(-1px);
 }
 
-.btn.login:hover {
-  background: #00bfa6;
-  color: #1f2c34;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
+/* FILLED PILL (Signup) */
+.btn-signup {
+  padding: 8px 24px;
+  border-radius: 999px;
 
-/* Signup button */
-.btn.signup {
-  background: #00bfa6;
-  color: #1f2c34;
+  background: linear-gradient(135deg, #00e5ff, #00bcd4);
+  color: #001a1f;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
   border: none;
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(0, 229, 255, 0.45);
+  transition: all 0.3s ease;
 }
 
-.btn.signup:hover {
-  background: #00e0c1;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+.btn-signup:hover {
+  background: linear-gradient(135deg, #00f2ff, #00acc1);
+  box-shadow: 0 8px 24px rgba(0, 229, 255, 0.7);
+  transform: translateY(-1px);
 }
 
-/* Remove underline effect on buttons */
-/* Remove underline effect on buttons */
-.btn::after {
-  content: none;
-}
-
-/* Logout button */
-.logout-btn {
-  background: transparent;
-  border: 2px solid #ff4d4d;
-  color: #ff4d4d;
-}
-
-.logout-btn:hover {
-  background: #ff4d4d;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    padding: 15px 20px;
-  }
-
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
   .nav-links {
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 10px;
-    width: 100%;
+    display: none;
   }
 
-  .nav-links li a,
-  .btn {
-    width: 100%;
-    display: block;
-    text-align: center;
-    margin-bottom: 10px; /* spacing between links/buttons */
+  .nav-actions {
+    gap: 10px;
   }
 }

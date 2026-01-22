@@ -1,0 +1,26 @@
+.recorder-card {
+  text-align: center;
+}
+
+.recorder-title {
+  color: #00ffc6;
+  margin-bottom: 15px;
+}
+
+.transcript-box {
+  min-height: 120px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #e6f1ff;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 255, 198, 0.3);
+}
+
+.recorder-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
