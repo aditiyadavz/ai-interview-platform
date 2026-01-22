@@ -38,15 +38,10 @@
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  min-height: 380px;     /* instead of aspect-ratio */
+  aspect-ratio: 1 / 1; /* perfect square */
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: visible;    /* allow content */
-}
-
-.roles-container {
-  min-height: 100vh;
-  padding: 60px 8% 100px;
+  overflow: hidden; /* ensures content stays inside */
 }
 
 .role-card:hover {
@@ -59,13 +54,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;.role-card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   height: 100%;
-  overflow: visible; /* changed from auto to visible */
-}
+  overflow: auto; /* scroll if content is too big */
 }
 
 /* ICON */

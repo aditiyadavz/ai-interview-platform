@@ -1,0 +1,164 @@
+/* ===== BACKGROUND ===== */
+.auth-container {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at 20% 30%, #1b3a4b, transparent 40%),
+    radial-gradient(circle at 80% 20%, #0a9396, transparent 35%),
+    radial-gradient(circle at 50% 80%, #005f73, transparent 40%),
+    linear-gradient(180deg, #020b16, #041726);
+  overflow: hidden;
+}
+
+/* floating glowing blobs */
+.auth-container::before,
+.auth-container::after {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(0,245,255,0.35), transparent 60%);
+  filter: blur(80px);
+  animation: float 10s infinite alternate ease-in-out;
+}
+
+.auth-container::before {
+  top: -100px;
+  left: -80px;
+}
+
+.auth-container::after {
+  bottom: -120px;
+  right: -100px;
+  animation-delay: 3s;
+}
+
+/* ===== CARD ===== */
+.auth-card {
+  width: 390px;
+  padding: 2.6rem;
+  position: relative;
+  z-index: 2;
+
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.14),
+    rgba(255,255,255,0.04)
+  );
+
+  backdrop-filter: blur(20px);
+  border-radius: 22px;
+
+  border: 1px solid rgba(255,255,255,0.18);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.7),
+    inset 0 0 30px rgba(255,255,255,0.04);
+
+  animation: popIn 0.7s ease forwards;
+  transform: scale(0.96);
+}
+
+.auth-card:hover {
+  transform: scale(1);
+}
+
+/* glowing border */
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 22px;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(0,245,255,0.6),
+    transparent
+  );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ===== TEXT ===== */
+.auth-card h2 {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.auth-card p {
+  color: #e6faff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 1.8rem;
+  line-height: 1.5;
+}
+
+/* ===== INPUTS ===== */
+.auth-card input {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.auth-card input:focus {
+  background: rgba(255,255,255,0.18);
+  border-color: #00f5ff;
+  box-shadow: 0 0 18px rgba(0,245,255,0.4);
+}
+
+/* ===== BUTTON ===== */
+.auth-btn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 10px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+
+  background: linear-gradient(135deg, #00f5ff, #00ffa2);
+  color: #001219;
+
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0,255,255,0.8);
+}
+
+/* ===== FOOTER ===== */
+.auth-footer {
+  display: block;
+  margin-top: 18px;
+  color: #b6dbe5;
+}
+
+.auth-footer a {
+  color: #00f5ff;
+  text-decoration: none;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40px); }
+}
+
+@keyframes popIn {
+  to { transform: scale(1); }
+}

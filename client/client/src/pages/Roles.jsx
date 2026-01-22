@@ -12,6 +12,7 @@ const Roles = () => {
       topics: ["React & Hooks", "JavaScript", "HTML & CSS"],
       level: "Beginner – Intermediate",
       duration: "20–30 mins",
+      route: "/interview/frontend",
     },
     {
       icon: "🖥",
@@ -20,6 +21,7 @@ const Roles = () => {
       topics: ["Node.js", "Java", "Databases"],
       level: "Intermediate",
       duration: "30 mins",
+      route: "/interview/backend",
     },
     {
       icon: "📘",
@@ -28,6 +30,7 @@ const Roles = () => {
       topics: ["Arrays", "Trees", "Graphs"],
       level: "Medium – Hard",
       duration: "45 mins",
+      route: "/interview/dsa",
     },
     {
       icon: "🧑‍💼",
@@ -36,14 +39,9 @@ const Roles = () => {
       topics: ["HR", "Behavioral", "Situational Questions"],
       level: "Easy",
       duration: "15–20 mins",
+      route: "/interview/hr",
     },
   ];
-
-  const handleStartInterview = (roleTitle) => {
-    navigate("/interview-setup", {
-      state: { role: roleTitle },
-    });
-  };
 
   return (
     <div className="roles-container">
@@ -57,30 +55,23 @@ const Roles = () => {
         {roles.map((role, index) => (
           <div className="role-card" key={index}>
             <div className="role-icon">{role.icon}</div>
+            <h2>{role.title}</h2>
+            <p className="role-desc">{role.desc}</p>
 
-            <div className="role-card-content">
-              <h2>{role.title}</h2>
-              <p className="role-desc">{role.desc}</p>
+            <ul className="role-details">
+              {role.topics.map((topic, idx) => (
+                <li key={idx}>{topic}</li>
+              ))}
+            </ul>
 
-              <ul className="role-details">
-                {role.topics.map((topic, idx) => (
-                  <li key={idx}>{topic}</li>
-                ))}
-              </ul>
+            <div className="role-meta">
+              <span className="level">Level: {role.level}</span>
+              <span className="duration">Duration: {role.duration}</span>
+            </div>
 
-              <div className="role-meta">
-                <span>Level: {role.level}</span>
-                <span>{role.duration}</span>
-              </div>
-
-              <div className="role-actions">
-                <button
-                  onClick={() => handleStartInterview(role.title)}
-                >
-                  Start Interview
-                </button>
-                <button className="secondary">View Syllabus</button>
-              </div>
+            <div className="role-actions">
+              <button onClick={() => navigate(role.route)}>Start Interview</button>
+              <button className="secondary">View Syllabus</button>
             </div>
           </div>
         ))}

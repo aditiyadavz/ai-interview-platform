@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/common/Navbar";
 import "../styles/home.css";
 
 const Home = () => {
@@ -12,6 +13,8 @@ const Home = () => {
 
   return (
     <>
+      <Navbar />
+
       {/* HERO SECTION */}
       <section className="hero">
         <div className="hero-content">
