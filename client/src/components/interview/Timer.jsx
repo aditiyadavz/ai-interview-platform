@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import "../../styles/interview.css";
 
-const Timer = ({ duration, onTimeUp }) => {
+const Timer = ({ duration, questionIndex, onTimeUp }) => {
   const [time, setTime] = useState(duration);
+
+  useEffect(() => {
+    setTime(duration);
+  }, [questionIndex]);
 
   useEffect(() => {
     if (time === 0) {
       onTimeUp();
       return;
     }
-    const t = setTimeout(() => setTime(time - 1), 1000);
+    const t = setTimeout(() => setTime((t) => t - 1), 1000);
     return () => clearTimeout(t);
   }, [time]);
 

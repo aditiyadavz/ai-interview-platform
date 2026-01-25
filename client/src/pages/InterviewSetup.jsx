@@ -6,7 +6,7 @@ import "../styles/interviewSetup.css";
 const InterviewSetup = () => {
   const { role } = useParams();
   const navigate = useNavigate();
-  const { resetInterview } = useInterview(); // 🔴 ADD THIS
+  const { startInterview } = useInterview(); // ✅ CORRECT
 
   const [camera, setCamera] = useState(false);
   const [mic, setMic] = useState(false);
@@ -15,7 +15,7 @@ const InterviewSetup = () => {
   const cameraStreamRef = useRef(null);
   const micStreamRef = useRef(null);
 
-  // Toggle camera
+  // 🎥 Toggle camera
   const checkCamera = async () => {
     if (camera) {
       cameraStreamRef.current?.getTracks().forEach(track => track.stop());
@@ -35,7 +35,7 @@ const InterviewSetup = () => {
     }
   };
 
-  // Toggle microphone
+  // 🎙 Toggle microphone
   const checkMic = async () => {
     if (mic) {
       micStreamRef.current?.getTracks().forEach(track => track.stop());
@@ -55,7 +55,7 @@ const InterviewSetup = () => {
     }
   };
 
-  // Cleanup on leave
+  // 🧹 Cleanup
   useEffect(() => {
     return () => {
       cameraStreamRef.current?.getTracks().forEach(track => track.stop());
@@ -97,7 +97,7 @@ const InterviewSetup = () => {
           className={`join-btn ${camera && mic ? "active" : ""}`}
           disabled={!(camera && mic)}
           onClick={() => {
-            resetInterview(); // 🔴 RESET HERE
+            startInterview(role); // ✅ START interview properly
             navigate(`/interview-room/${role}`);
           }}
         >

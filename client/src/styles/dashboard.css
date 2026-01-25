@@ -6,14 +6,14 @@
       transparent 40%
     ),
     linear-gradient(180deg, #0b1f26, #08161c);
-  padding: 80px 6%;
+  padding: 90px 6%;
   color: #e6fdfb;
 }
 
 /* HERO */
 .dashboard-hero {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 70px;
 }
 
 .dashboard-hero h1 {
@@ -30,6 +30,22 @@
   opacity: 0.85;
 }
 
+.logout-btn {
+  margin-top: 20px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e6fdfb;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #ff5252;
+  color: #fff;
+}
+
 /* CARDS */
 .dashboard-cards {
   display: grid;
@@ -39,8 +55,8 @@
 
 .dashboard-card {
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 18px;
-  padding: 30px 26px;
+  border-radius: 20px;
+  padding: 30px;
   backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 255, 224, 0.15);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
@@ -49,23 +65,23 @@
 
 .dashboard-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 50px rgba(0, 255, 224, 0.25);
+  box-shadow: 0 15px 45px rgba(0, 255, 224, 0.25);
 }
 
 .dashboard-card .icon {
-  font-size: 2.4rem;
-  margin-bottom: 12px;
+  font-size: 2.6rem;
+  margin-bottom: 14px;
 }
 
 .dashboard-card h3 {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   margin-bottom: 10px;
 }
 
 .dashboard-card p {
   font-size: 0.95rem;
   opacity: 0.85;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .dashboard-card ul {
@@ -78,7 +94,7 @@
   margin-bottom: 6px;
 }
 
-/* PRIMARY CARD */
+/* PRIMARY */
 .dashboard-card.primary {
   border: 1px solid #00ffe0;
 }
@@ -88,7 +104,7 @@
   padding: 12px;
   background: linear-gradient(135deg, #00ffe0, #00c9b7);
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   color: #002a2a;
   font-weight: 600;
   cursor: pointer;
@@ -97,14 +113,22 @@
 
 .dashboard-card button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 255, 224, 0.6);
+  box-shadow: 0 0 22px rgba(0, 255, 224, 0.6);
 }
 
-/* COMING SOON */
 .coming-soon {
-  display: inline-block;
-  margin-top: 12px;
   font-size: 0.85rem;
   color: #00ffe0;
   opacity: 0.7;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .dashboard-hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .dashboard-container {
+    padding: 70px 5%;
+  }
 }

@@ -1,0 +1,157 @@
+/* PAGE */
+.scorecard-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #e0f7fa;
+}
+
+/* CONTAINER */
+.scorecard-container {
+  max-width: 1100px;
+  width: 100%;
+  padding: 30px;
+  border-radius: 20px;
+}
+
+/* HEADER */
+.score-title {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #00e5ff;
+}
+
+.score-subtitle {
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+/* OVERALL */
+.overall-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* SCORE RING */
+.score-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #00e5ff var(--score),
+    rgba(255, 255, 255, 0.15) 0
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-ring span {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* VERDICT */
+.verdict {
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+.verdict.excellent {
+  background: #00e676;
+  color: black;
+}
+
+.verdict.good {
+  background: #ffeb3b;
+  color: black;
+}
+
+.verdict.needs-improvement {
+  background: #ff5252;
+}
+
+/* METRICS */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 30px 0;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+/* QUESTIONS */
+.question-section h2 {
+  margin-bottom: 14px;
+}
+
+.question-card {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+/* BARS */
+.bar {
+  margin-top: 8px;
+}
+
+.bar span {
+  font-size: 0.85rem;
+}
+
+.progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress div {
+  height: 100%;
+  background: #00e5ff;
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.actions button {
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, #00e5ff, #00bcd4);
+}
+
+.actions .secondary {
+  background: transparent;
+  border: 1px solid #00e5ff;
+  color: #00e5ff;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,127 @@
+/* PAGE */
+.feedback-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #e0f7fa;
+}
+
+/* CONTAINER */
+.feedback-container {
+  max-width: 1100px;
+  width: 100%;
+  padding: 30px;
+  border-radius: 20px;
+}
+
+/* HEADER */
+.feedback-title {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #00e5ff;
+}
+
+.feedback-subtitle {
+  text-align: center;
+  opacity: 0.85;
+  margin-bottom: 30px;
+}
+
+/* AI SUMMARY */
+.ai-summary {
+  background: rgba(0, 0, 0, 0.45);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+/* STRENGTH / WEAK */
+.sw-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.sw-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.sw-card h3 {
+  color: #00e5ff;
+  margin-bottom: 10px;
+}
+
+.sw-card.weak h3 {
+  color: #ff5252;
+}
+
+/* SKILLS */
+.skills-section h2 {
+  margin-bottom: 14px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.skill-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 18px;
+  border-radius: 14px;
+}
+
+/* QUESTION FEEDBACK */
+.question-feedback-card {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+
+.question-feedback-card .tip {
+  color: #00e5ff;
+  margin-top: 6px;
+}
+
+/* ACTIONS */
+.feedback-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.feedback-actions button {
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, #00e5ff, #00bcd4);
+}
+
+.feedback-actions .secondary {
+  background: transparent;
+  border: 1px solid #00e5ff;
+  color: #00e5ff;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .sw-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
