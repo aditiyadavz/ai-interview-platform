@@ -27,7 +27,6 @@ const InterviewRoom = () => {
     currentIndex,
     nextQuestion,
     finished,
-    resetInterview,
   } = useInterview();
 
   const {
@@ -37,64 +36,93 @@ const InterviewRoom = () => {
     stopRecording,
   } = useRecorder();
 
-  // 🔴 Start camera
-  const startCamera = async () => {
-    if (streamRef.current) return;
-
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-
-    streamRef.current = stream;
-    videoRef.current.srcObject = stream;
-  };
-
-  // 🔴 Stop camera
-  const stopCamera = () => {
+  // 🔴 HARD STOP EVERYTHING
+  const stopAllMedia = () => {
     stopRecording();
-    streamRef.current?.getTracks().forEach(track => track.stop());
+
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => {
+        track.enabled = false;
+        track.stop();
+      });
+    }
+
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.srcObject = null;
+    }
+
     streamRef.current = null;
   };
 
-  // 🎥 Toggle Camera
-  const toggleCamera = () => {
-    if (cameraOn) {
-      streamRef.current
-        ?.getVideoTracks()
-        .forEach(track => (track.enabled = false));
-    } else {
-      streamRef.current
-        ?.getVideoTracks()
-        .forEach(track => (track.enabled = true));
-    }
-    setCameraOn(!cameraOn);
-  };
-
-  // 🎙️ Toggle Mic
-  const toggleMic = () => {
-    streamRef.current
-      ?.getAudioTracks()
-      .forEach(track => (track.enabled = !micOn));
-    setMicOn(!micOn);
-  };
-
-  // 🔁 Init interview
+  // 🎥 START CAMERA ON ENTER
   useEffect(() => {
-    resetInterview();
-
     let mounted = true;
 
-    startCamera().then(() => {
-      if (!mounted) return;
-      setTimeout(startRecording, 1500);
-    });
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        if (!mounted) return;
+
+        streamRef.current = stream;
+        videoRef.current.srcObject = stream;
+
+        setTimeout(startRecording, 1200);
+      })
+      .catch(console.error);
 
     return () => {
       mounted = false;
-      stopCamera();
+      stopAllMedia();
     };
   }, []);
+
+  // 🔥 TAB SWITCH SAFETY
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) stopAllMedia();
+    };
+
+    window.addEventListener("visibilitychange", handleVisibility);
+    return () =>
+      window.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
+  // 🎥 CAMERA TOGGLE (LIGHT OFF IMMEDIATELY)
+  const toggleCamera = () => {
+    const videoTrack = streamRef.current
+      ?.getTracks()
+      .find(t => t.kind === "video");
+
+    if (!videoTrack) return;
+
+    if (cameraOn) {
+      videoTrack.enabled = false;
+      videoTrack.stop(); // 🔥 LIGHT OFF
+      setCameraOn(false);
+    } else {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(stream => {
+          const newTrack = stream.getVideoTracks()[0];
+          streamRef.current.addTrack(newTrack);
+          videoRef.current.srcObject = streamRef.current;
+          setCameraOn(true);
+        });
+    }
+  };
+
+  // 🎙 MIC TOGGLE
+  const toggleMic = () => {
+    const audioTrack = streamRef.current
+      ?.getTracks()
+      .find(t => t.kind === "audio");
+
+    if (!audioTrack) return;
+
+    audioTrack.enabled = !audioTrack.enabled;
+    setMicOn(audioTrack.enabled);
+  };
 
   const handleNext = () => {
     stopRecording();
@@ -102,8 +130,8 @@ const InterviewRoom = () => {
     nextQuestion(transcript, score);
 
     if (finished) {
-      stopCamera();
-      navigate("/feedback");
+      stopAllMedia();
+      requestAnimationFrame(() => navigate("/feedback"));
     } else {
       startRecording();
     }
@@ -121,17 +149,17 @@ const InterviewRoom = () => {
           autoPlay
           muted
           playsInline
-          className={`camera-box ${!cameraOn ? "camera-off" : ""}`}
+          className="camera-box"
         />
 
-        {/* 🔘 CONTROLS */}
+        {/* 🎛 CONTROLS */}
         <div className="media-controls">
-          <button onClick={toggleCamera} className="control-btn">
-            {cameraOn ? "🎥 Camera On" : "🚫 Camera Off"}
+          <button onClick={toggleCamera}>
+            {cameraOn ? "Turn Camera Off" : "Turn Camera On"}
           </button>
 
-          <button onClick={toggleMic} className="control-btn">
-            {micOn ? "🎙️ Mic On" : "🔇 Mic Muted"}
+          <button onClick={toggleMic}>
+            {micOn ? "Mute Mic" : "Unmute Mic"}
           </button>
         </div>
 
@@ -150,7 +178,7 @@ const InterviewRoom = () => {
         />
 
         <button className="neon-btn" onClick={handleNext}>
-          Next
+          {finished ? "Finish Interview" : "Next"}
         </button>
       </div>
     </div>
