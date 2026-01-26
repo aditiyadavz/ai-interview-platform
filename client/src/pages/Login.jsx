@@ -11,8 +11,20 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
+    // ⏳ Fake API delay (replace later with backend)
     setTimeout(() => {
+      // 🔐 AUTH FLAG
       localStorage.setItem("isAuthenticated", "true");
+
+      // 👤 USER DATA (used in Dashboard welcome)
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: "Pareekshit",        // later from backend
+          email: "user@example.com",
+        })
+      );
+
       navigate("/dashboard");
     }, 1200);
   };
@@ -22,14 +34,26 @@ const Login = () => {
       {loading && <Loader text="Logging you in..." />}
 
       <div className="auth-container">
-        <div className="auth-card">
+        <div className="auth-card glass-card">
           <h2>Welcome Back 👋</h2>
           <p>Login to continue your AI interview journey</p>
 
           <form onSubmit={handleLogin}>
-            <input type="email" placeholder="Email" required />
-            <input type="password" placeholder="Password" required />
-            <button className="auth-btn">Login</button>
+            <input
+              type="email"
+              placeholder="Email"
+              required
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              required
+            />
+
+            <button className="auth-btn">
+              Login
+            </button>
           </form>
 
           <span className="auth-footer">

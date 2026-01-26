@@ -11,7 +11,9 @@ import Contact from "./pages/Contact";
 import Roles from "./pages/Roles";
 import InterviewSetup from "./pages/InterviewSetup";
 import InterviewRoom from "./pages/InterviewRoom";
-
+import ScoreCard from "./pages/ScoreCard";
+import Feedback from "./pages/Feedback";
+import InterviewHistory from "./pages/InterviewHistory";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
@@ -49,6 +51,35 @@ function App() {
           element={
             <ProtectedRoute>
               <InterviewRoom />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/interview-history"
+          element={
+            <ProtectedRoute>
+              <InterviewHistory />
+            </ProtectedRoute>
+          }
+       />
+
+
+        {/* ✅ ScoreCard MUST have a param */}
+        <Route
+          path="/scorecard/:role"
+          element={
+            <ProtectedRoute>
+              <ScoreCard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/feedback/:role"
+          element={
+            <ProtectedRoute>
+              <Feedback />
             </ProtectedRoute>
           }
         />

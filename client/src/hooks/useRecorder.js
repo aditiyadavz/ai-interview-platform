@@ -9,10 +9,7 @@ const useRecorder = () => {
     const SR =
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    if (!SR) {
-      alert("Speech recognition not supported");
-      return;
-    }
+    if (!SR) return;
 
     const recog = new SR();
     recog.continuous = true;
@@ -28,6 +25,10 @@ const useRecorder = () => {
     };
 
     recognitionRef.current = recog;
+
+    return () => {
+      recog.abort(); // 🔥 HARD STOP
+    };
   }, []);
 
   const startRecording = () => {
@@ -37,7 +38,7 @@ const useRecorder = () => {
   };
 
   const stopRecording = () => {
-    recognitionRef.current?.stop();
+    recognitionRef.current?.abort(); // 🔥 NOT stop()
     setIsRecording(false);
   };
 

@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import QuestionCard from "../components/interview/QuestionCard";
-import AnswerRecorder from "../components/interview/AnswerRecorder";
-import Timer from "../components/interview/Timer";
-import ProgressBar from "../components/interview/ProgressBar";
-
-import useRecorder from "../hooks/useRecorder";
-import { analyzeAnswer } from "../utils/analyzeAnswer";
 import { useInterview } from "../context/InterviewContext";
-
+import { analyzeAnswer } from "../utils/analyzeAnswer";
+import Timer from "../components/interview/Timer";
 import "../styles/interview.css";
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const InterviewRoom = () => {
   const { role } = useParams();
@@ -18,168 +14,153 @@ const InterviewRoom = () => {
 
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   const [cameraOn, setCameraOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
+  const [transcript, setTranscript] = useState("");
 
-  const {
-    QUESTIONS,
-    currentIndex,
-    nextQuestion,
-    finished,
-  } = useInterview();
+  const { questions, currentIndex, nextQuestion } = useInterview();
 
-  const {
-    transcript,
-    isRecording,
-    startRecording,
-    stopRecording,
-  } = useRecorder();
+  /* SAFETY */
+  useEffect(() => {
+    if (!questions.length) navigate(`/interview-setup/${role}`);
+  }, [questions, navigate, role]);
 
-  // 🔴 HARD STOP EVERYTHING
-  const stopAllMedia = () => {
-    stopRecording();
+  /* CLEANUP */
+  const cleanupMedia = () => {
+    recognitionRef.current?.stop();
+    recognitionRef.current = null;
 
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => {
-        track.enabled = false;
-        track.stop();
-      });
-    }
-
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.srcObject = null;
-    }
-
+    streamRef.current?.getTracks().forEach(t => t.stop());
     streamRef.current = null;
+
+    if (videoRef.current) videoRef.current.srcObject = null;
+
+    setCameraOn(false);
+    setMicOn(false);
   };
 
-  // 🎥 START CAMERA ON ENTER
-  useEffect(() => {
-    let mounted = true;
+  /* CAMERA */
+  const startCamera = async () => {
+    if (streamRef.current) return;
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    streamRef.current = stream;
+    videoRef.current.srcObject = stream;
+    setCameraOn(true);
+  };
 
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then(stream => {
-        if (!mounted) return;
+  const stopCamera = () => {
+    streamRef.current?.getTracks().forEach(t => t.stop());
+    streamRef.current = null;
+    if (videoRef.current) videoRef.current.srcObject = null;
+    setCameraOn(false);
+  };
 
-        streamRef.current = stream;
-        videoRef.current.srcObject = stream;
+  /* SPEECH */
+  const startListening = () => {
+    if (!SpeechRecognition || recognitionRef.current) return;
 
-        setTimeout(startRecording, 1200);
-      })
-      .catch(console.error);
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
 
-    return () => {
-      mounted = false;
-      stopAllMedia();
+    recognition.onresult = (e) => {
+      let text = "";
+      for (let i = 0; i < e.results.length; i++) {
+        text += e.results[i][0].transcript;
+      }
+      setTranscript(text);
     };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+    setMicOn(true);
+  };
+
+  const stopListening = () => {
+    recognitionRef.current?.stop();
+    recognitionRef.current = null;
+    setMicOn(false);
+  };
+
+  /* INIT */
+  useEffect(() => {
+    startCamera();
+    startListening();
+    return cleanupMedia;
   }, []);
 
-  // 🔥 TAB SWITCH SAFETY
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (document.hidden) stopAllMedia();
-    };
-
-    window.addEventListener("visibilitychange", handleVisibility);
-    return () =>
-      window.removeEventListener("visibilitychange", handleVisibility);
-  }, []);
-
-  // 🎥 CAMERA TOGGLE (LIGHT OFF IMMEDIATELY)
-  const toggleCamera = () => {
-    const videoTrack = streamRef.current
-      ?.getTracks()
-      .find(t => t.kind === "video");
-
-    if (!videoTrack) return;
-
-    if (cameraOn) {
-      videoTrack.enabled = false;
-      videoTrack.stop(); // 🔥 LIGHT OFF
-      setCameraOn(false);
-    } else {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(stream => {
-          const newTrack = stream.getVideoTracks()[0];
-          streamRef.current.addTrack(newTrack);
-          videoRef.current.srcObject = streamRef.current;
-          setCameraOn(true);
-        });
-    }
-  };
-
-  // 🎙 MIC TOGGLE
-  const toggleMic = () => {
-    const audioTrack = streamRef.current
-      ?.getTracks()
-      .find(t => t.kind === "audio");
-
-    if (!audioTrack) return;
-
-    audioTrack.enabled = !audioTrack.enabled;
-    setMicOn(audioTrack.enabled);
-  };
-
+  /* NEXT / FINISH */
   const handleNext = () => {
-    stopRecording();
-    const score = analyzeAnswer(transcript);
-    nextQuestion(transcript, score);
+    stopListening();
 
-    if (finished) {
-      stopAllMedia();
-      requestAnimationFrame(() => navigate("/feedback"));
+    const score = analyzeAnswer(transcript);
+    const isLast = currentIndex === questions.length - 1;
+
+    nextQuestion(transcript, score);
+    setTranscript("");
+
+    if (isLast) {
+      cleanupMedia();
+      navigate(`/feedback/${role}`);
     } else {
-      startRecording();
+      startListening();
     }
   };
 
-  if (!QUESTIONS?.length) return null;
+  if (!questions.length) return null;
 
   return (
     <div className="interview-page">
-      <div className="glass-card">
-        <h1>{role.toUpperCase()} Interview</h1>
+      <div className="interview-layout">
 
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          className="camera-box"
-        />
+        {/* LEFT */}
+        <div className="glass-card left-panel">
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            className={`camera-box ${!cameraOn ? "camera-off" : ""}`}
+          />
 
-        {/* 🎛 CONTROLS */}
-        <div className="media-controls">
-          <button onClick={toggleCamera}>
-            {cameraOn ? "Turn Camera Off" : "Turn Camera On"}
-          </button>
+          <div className="media-controls">
+            <button className="control-btn" onClick={() => cameraOn ? stopCamera() : startCamera()}>
+              🎥 {cameraOn ? "Camera On" : "Camera Off"}
+            </button>
+            <button className="control-btn" onClick={() => micOn ? stopListening() : startListening()}>
+              🎙 {micOn ? "Mic On" : "Mic Muted"}
+            </button>
+          </div>
+        </div>
 
-          <button onClick={toggleMic}>
-            {micOn ? "Mute Mic" : "Unmute Mic"}
+        {/* RIGHT */}
+        <div className="glass-card right-panel">
+          <div className="top-right">
+            <Timer duration={60} onTimeUp={handleNext} />
+          </div>
+
+          <div className="question-card">
+            <h3>Question {currentIndex + 1}</h3>
+            <p>{questions[currentIndex]}</p>
+          </div>
+
+          <div className={`recorder-card ${micOn ? "active" : ""}`}>
+            <h4>Your Answer (Live)</h4>
+            <div className="recorder-text">
+              {micOn
+                ? transcript || "Start speaking..."
+                : <span className="muted-text">Microphone muted</span>}
+            </div>
+          </div>
+
+          <button className="neon-btn" onClick={handleNext}>
+            {currentIndex === questions.length - 1 ? "Finish Interview" : "Next Question"}
           </button>
         </div>
 
-        <ProgressBar
-          current={currentIndex + 1}
-          total={QUESTIONS.length}
-        />
-
-        <Timer duration={60} onTimeUp={handleNext} />
-
-        <QuestionCard question={QUESTIONS[currentIndex]} />
-
-        <AnswerRecorder
-          transcript={transcript}
-          isRecording={isRecording}
-        />
-
-        <button className="neon-btn" onClick={handleNext}>
-          {finished ? "Finish Interview" : "Next"}
-        </button>
       </div>
     </div>
   );
