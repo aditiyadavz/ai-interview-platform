@@ -1,3 +1,7 @@
+/* ========================== */
+/* ROLES SECTION STYLING      */
+/* ========================== */
+
 .roles-container {
   min-height: 100vh;
   padding: 80px 6%;
@@ -22,24 +26,30 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 30px;
-  align-items: stretch;
 }
 
 /* CARD */
 .role-card {
   background: #1b2a32;
-  border-radius: 18px;
+  border-radius: 18px; /* extra rounded */
   padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  box-shadow: 0 14px 35px rgba(0,0,0,0.4);
-  transition: all 0.3s ease;
+
+  /* Shadow */
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    0 0 15px rgba(0, 255, 198, 0.1);
+
+  transition: 0.3s;
 }
 
 .role-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 22px 45px rgba(0,255,200,0.25);
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(0, 255, 198, 0.25);
 }
 
 /* HEADER */
@@ -57,29 +67,6 @@
   font-size: 18px;
 }
 
-/* DESCRIPTION */
-.role-desc {
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-/* TOPICS */
-.role-details {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.role-details li {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  background: rgba(0,255,198,0.15);
-  color: #00ffc6;
-}
-
 /* META */
 .role-meta {
   display: flex;
@@ -88,9 +75,15 @@
   opacity: 0.85;
 }
 
-/* BUTTON */
-.role-btn {
+/* ACTION BUTTONS */
+.role-actions {
+  display: flex;
+  gap: 10px;
   margin-top: auto;
+}
+
+.role-btn {
+  flex: 1;
   padding: 10px;
   border-radius: 10px;
   border: none;
@@ -106,9 +99,143 @@
   transform: scale(1.03);
 }
 
+.outline-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #00ffc6;
+  background: transparent;
+  color: #00ffc6;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.outline-btn:hover {
+  background: rgba(0,255,198,0.15);
+}
+
+/* ===================== */
+/* GLOSSY WIDE MODAL     */
+/* ===================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at top,
+    rgba(0,255,198,0.18),
+    rgba(0,0,0,0.85)
+  );
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  position: relative;
+
+  /* GLASS EFFECT */
+  background: linear-gradient(
+    135deg,
+    rgba(27,42,50,0.7),
+    rgba(15,32,39,0.95)
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  color: #ffffff;
+  padding: 28px 48px;
+
+  /* WIDTH & HEIGHT */
+  width: min(85%, 700px);
+  max-height: 70vh;
+
+  /* SCROLLABLE CONTENT */
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  scroll-behavior: smooth;
+
+  /* ROUND & SHADOW */
+  border-radius: 40px;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 40px rgba(0, 255, 198, 0.3);
+
+  animation: pop 0.35s ease;
+}
+
+.modal-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* MODAL SHINE */
+.modal-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.18),
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+/* MODAL CONTENT */
+.modal-card h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.modal-card h4 {
+  margin-top: 16px;
+  margin-bottom: 6px;
+  color: #00ffc6;
+  font-size: 15px;
+}
+
+.modal-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.modal-card ul {
+  padding-left: 18px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.modal-card li {
+  margin-bottom: 5px;
+}
+
 /* MOBILE */
 @media (max-width: 600px) {
   .roles-container {
     padding: 60px 20px;
+  }
+
+  .modal-card {
+    width: 90%;
+    padding: 22px;
+    max-height: 75vh;
+  }
+}
+
+/* ANIMATION */
+@keyframes pop {
+  from {
+    transform: scale(0.9) translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
   }
 }
