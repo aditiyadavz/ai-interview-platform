@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/common/Loader";
 import "../styles/Dashboard.css";
 
@@ -9,48 +9,38 @@ const Dashboard = () => {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
+    const isAuth = localStorage.getItem("isAuthenticated");
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.name) setUserName(user.name);
-  }, []);
 
-  const handleLogout = () => {
-    setLoading(true);
-
-    setTimeout(() => {
-      localStorage.removeItem("isAuthenticated");
-      localStorage.removeItem("user");
+    if (!isAuth || !user) {
       navigate("/login");
-    }, 800);
-  };
+      return;
+    }
+
+    setUserName(user.name);
+  }, [navigate]);
 
   return (
     <>
-      {loading && <Loader text="Logging you out..." />}
+      {loading && <Loader text="Loading..." />}
 
       <div className="dashboard-container">
         {/* HERO */}
         <div className="dashboard-hero">
           <h1>Welcome, {userName || "Candidate"}</h1>
           <p>Your AI-powered interview control center</p>
-
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
         </div>
 
-        {/* CARDS */}
+        {/* ACTION CARDS */}
         <div className="dashboard-cards">
-
-          {/* PERSONAL INFO */}
+          {/* PROFILE CARD */}
           <div className="dashboard-card">
             <div className="icon">👤</div>
-            <h3>Personal Profile</h3>
-            <p>View and manage your personal information.</p>
-            <ul>
-              <li>Name: {userName}</li>
-              <li>Email: user@example.com</li>
-            </ul>
-            <span className="coming-soon">Editable soon</span>
+            <h3>Profile</h3>
+            <p>Check and edit your personal details.</p>
+            <button onClick={() => navigate("/profile")}>
+              View Profile
+            </button>
           </div>
 
           {/* START INTERVIEW */}
@@ -67,23 +57,11 @@ const Dashboard = () => {
           <div className="dashboard-card">
             <div className="icon">📊</div>
             <h3>Interview History</h3>
-            <p>Review your past interview performance.</p>
-            <button onClick={() => navigate("/dashboard/interview-history")}>
-              Attended Interviews
+            <p>View detailed stats, performance trends, and past interviews.</p>
+            <button onClick={() => navigate("/interview-history")}>
+              View History
             </button>
           </div>
-
-          {/* ABOUT COMPANY */}
-          <div className="dashboard-card">
-            <div className="icon">🏢</div>
-            <h3>About Platform</h3>
-            <p>
-              This AI Interview Platform helps candidates prepare
-              using real-time analysis and feedback.
-            </p>
-            <span className="coming-soon">More coming soon</span>
-          </div>
-
         </div>
       </div>
     </>

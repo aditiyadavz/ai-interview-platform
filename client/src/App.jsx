@@ -14,6 +14,7 @@ import InterviewRoom from "./pages/InterviewRoom";
 import ScoreCard from "./pages/ScoreCard";
 import Feedback from "./pages/Feedback";
 import InterviewHistory from "./pages/InterviewHistory";
+import Profile from "./pages/Profile"; // ✅ added Profile page
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
@@ -22,12 +23,13 @@ function App() {
       <Navbar />
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/roles" element={<Roles />} />
 
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -36,7 +38,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/roles"
+          element={
+            <ProtectedRoute>
+              <Roles />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/interview-setup/:role"
           element={
@@ -45,7 +54,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/interview-room/:role"
           element={
@@ -54,17 +62,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
-          path="/dashboard/interview-history"
+          path="/interview-history"
           element={
             <ProtectedRoute>
               <InterviewHistory />
             </ProtectedRoute>
           }
         />
-
-        {/* ✅ CORRECT SCORECARD ROUTE */}
         <Route
           path="/scorecard/:role"
           element={
@@ -73,12 +78,20 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/feedback/:role"
           element={
             <ProtectedRoute>
               <Feedback />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ Profile Page */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />

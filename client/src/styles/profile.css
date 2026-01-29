@@ -1,0 +1,221 @@
+/* ====== FULL PAGE BACKGROUND ====== */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #e0f7fa;
+    min-height: 100vh;
+}
+
+/* ====== CONTAINER ====== */
+.profile-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+/* ====== HERO SECTION ====== */
+.profile-hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.profile-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.profile-hero p {
+    font-size: 1.2rem;
+    color: #b2ebf2;
+}
+
+/* ====== PROFILE CARD ====== */
+.profile-card {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 30px 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ====== PROFILE PICTURE ====== */
+.profile-pic-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-pic-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 10px;
+}
+
+/* ====== LABELS ====== */
+.profile-card label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #e0f7fa;
+}
+
+/* ====== INPUT FIELDS ====== */
+.profile-card input[type="text"],
+.profile-card input[type="email"],
+.profile-card input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0f7fa;
+    font-size: 1rem;
+}
+
+.profile-card input::placeholder {
+    color: rgba(224, 247, 250, 0.6);
+}
+
+.profile-card input:focus {
+    outline: 2px solid #00bcd4;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ====== BUTTONS ====== */
+.profile-card button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #0f2027;
+    background: #00bcd4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.profile-card button:hover {
+    background: #26c6da;
+}
+
+/* ====== SKILLS MULTI-SELECT ====== */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.skill-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.skill-option input {
+    cursor: pointer;
+}
+
+.skill-option:hover {
+    background: rgba(0, 188, 212, 0.3);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 40px 15px;
+    }
+
+    .profile-hero h1 {
+        font-size: 2rem;
+    }
+
+    .profile-hero p {
+        font-size: 1rem;
+    }
+}
+/* ====== TAG STYLE SKILLS ====== */
+.skills-tag-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.skills-tag-input input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0f7fa;
+    font-size: 1rem;
+}
+
+.skills-tag-input input:focus {
+    outline: 2px solid #00bcd4;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.skills-tag-input button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #00bcd4;
+    color: #0f2027;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.skills-tag-input button:hover {
+    background: #26c6da;
+}
+
+.skills-tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-tag {
+    background: rgba(0, 188, 212, 0.3);
+    color: #0f2027;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.skill-tag .remove-skill {
+    cursor: pointer;
+    font-weight: bold;
+    
+    color: #0f2027;
+}
