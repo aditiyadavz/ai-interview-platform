@@ -1,25 +1,45 @@
+/* ===============================
+   DASHBOARD CONTAINER
+================================ */
+
+/* 🌞 LIGHT THEME (DEFAULT) */
 .dashboard-container {
   min-height: 100vh;
+  background: radial-gradient(
+      circle at top,
+      rgba(99, 102, 241, 0.12),
+      transparent 40%
+    ),
+    linear-gradient(180deg, #f5f7fb, #e9ecf3);
+  padding: 90px 6%;
+  color: #1f2937;
+}
+
+/* 🌙 DARK THEME (YOUR ORIGINAL — UNCHANGED) */
+body.dark .dashboard-container {
   background: radial-gradient(
       circle at top,
       rgba(0, 255, 224, 0.12),
       transparent 40%
     ),
     linear-gradient(180deg, #0b1f26, #08161c);
-  padding: 90px 6%;
   color: #e6fdfb;
 }
 
-/* HERO */
+/* ===============================
+   HERO
+================================ */
+
 .dashboard-hero {
   text-align: center;
   margin-bottom: 70px;
 }
 
+/* Light */
 .dashboard-hero h1 {
   font-size: 2.8rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #ffffff, #00ffe0);
+  background: linear-gradient(90deg, #111827, #6366f1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -30,14 +50,25 @@
   opacity: 0.85;
 }
 
+/* Dark */
+body.dark .dashboard-hero h1 {
+  background: linear-gradient(90deg, #ffffff, #00ffe0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===============================
+   LOGOUT BUTTON
+================================ */
+
 .logout-btn {
   margin-top: 20px;
   padding: 10px 22px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.08);
-  color: #e6fdfb;
+  background: rgba(0, 0, 0, 0.06);
+  color: #1f2937;
   transition: all 0.3s ease;
 }
 
@@ -46,27 +77,55 @@
   color: #fff;
 }
 
-/* CARDS */
+/* Dark */
+body.dark .logout-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e6fdfb;
+}
+
+/* ===============================
+   CARDS GRID
+================================ */
+
 .dashboard-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 30px;
 }
 
+/* ===============================
+   CARD
+================================ */
+
+/* Light */
 .dashboard-card {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
   padding: 30px;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Dark (original look preserved) */
+body.dark .dashboard-card {
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 255, 224, 0.15);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
 .dashboard-card:hover {
   transform: translateY(-10px);
+}
+
+body.dark .dashboard-card:hover {
   box-shadow: 0 15px 45px rgba(0, 255, 224, 0.25);
 }
+
+/* ===============================
+   CARD CONTENT
+================================ */
 
 .dashboard-card .icon {
   font-size: 2.6rem;
@@ -94,35 +153,63 @@
   margin-bottom: 6px;
 }
 
-/* PRIMARY */
+/* ===============================
+   PRIMARY CARD
+================================ */
+
 .dashboard-card.primary {
+  border: 1px solid #6366f1;
+}
+
+body.dark .dashboard-card.primary {
   border: 1px solid #00ffe0;
 }
 
+/* ===============================
+   BUTTON
+================================ */
+
+/* Light */
 .dashboard-card button {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #00ffe0, #00c9b7);
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   border: none;
   border-radius: 14px;
-  color: #002a2a;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* Dark */
+body.dark .dashboard-card button {
+  background: linear-gradient(135deg, #00ffe0, #00c9b7);
+  color: #002a2a;
+}
+
 .dashboard-card button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 22px rgba(0, 255, 224, 0.6);
 }
+
+/* ===============================
+   MISC
+================================ */
 
 .coming-soon {
   font-size: 0.85rem;
-  color: #00ffe0;
+  color: #6366f1;
   opacity: 0.7;
 }
 
-/* MOBILE */
+body.dark .coming-soon {
+  color: #00ffe0;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
 @media (max-width: 768px) {
   .dashboard-hero h1 {
     font-size: 2.2rem;

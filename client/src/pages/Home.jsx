@@ -5,7 +5,6 @@ import "../styles/home.css";
 const Home = () => {
   const navigate = useNavigate();
 
-  // Counter state
   const [counters, setCounters] = useState({
     interviews: 0,
     users: 0,
@@ -30,7 +29,7 @@ const Home = () => {
 
   return (
     <>
-      {/* ================= HERO SECTION (UNCHANGED) ================= */}
+      {/* HERO */}
       <section className="hero">
         <div className="hero-content">
           <span className="hero-badge">🚀 AI Powered</span>
@@ -63,10 +62,13 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= FEATURES ================= */}
+      {/* FEATURES */}
       <section className="features" id="features">
         <h2>Why Choose Our Platform?</h2>
-        <p className="features-subtitle">Everything you need to ace interviews</p>
+        <p className="features-subtitle">
+          Everything you need to ace interviews
+        </p>
+
         <div className="features-grid">
           <div className="feature-card">
             <h3>🎯 Mock Interviews</h3>
@@ -83,7 +85,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= COUNTERS (BACKGROUND IMAGE ADDED) ================= */}
+      {/* COUNTERS */}
       <section
         className="counters"
         style={{
@@ -105,44 +107,40 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= WAVEFORM ================= */}
-<section class="waveform-section">
-  <div class="waveform-container">
+      {/* WAVEFORM */}
+      <section className="waveform-section">
+        <div className="waveform-container">
+          <div className="waveform-left">
+            <span className="wave-badge">🎙 Real-Time AI</span>
+            <h2>Live Mic & Camera Feedback</h2>
+            <p>AI listens, analyzes, and guides you instantly</p>
 
-    <div class="waveform-left">
-      <span class="wave-badge">🎙 Real-Time AI</span>
-      <h2>Live Mic & Camera Feedback</h2>
-      <p>AI listens, analyzes, and guides you instantly</p>
+            <div className="waveform-stats">
+              <div>
+                <h4>Voice Clarity</h4>
+                <span>Excellent</span>
+              </div>
+              <div>
+                <h4>Eye Contact</h4>
+                <span>Good</span>
+              </div>
+              <div>
+                <h4>Response Time</h4>
+                <span>1.2s</span>
+              </div>
+            </div>
+          </div>
 
-      <div class="waveform-stats">
-        <div>
-          <h4>Voice Clarity</h4>
-          <span>Excellent</span>
+          <div className="waveform-right">
+            <div className="waveform-box">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
         </div>
-        <div>
-          <h4>Eye Contact</h4>
-          <span>Good</span>
-        </div>
-        <div>
-          <h4>Response Time</h4>
-          <span>1.2s</span>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <div class="waveform-right">
-      <div class="waveform-box">
-        <span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-
-      {/* ================= TESTIMONIALS (BACKGROUND IMAGE ADDED) ================= */}
+      {/* TESTIMONIALS */}
       <section
         className="testimonials"
         style={{
@@ -176,40 +174,26 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= COMPANIES ================= */}
+      {/* COMPANIES */}
       <section className="companies">
-  <h2>Trusted by Candidates Preparing For</h2>
-  <p className="companies-subtitle">
-    Interviews at world-class tech companies
-  </p>
+        <h2>Trusted by Candidates Preparing For</h2>
+        <p className="companies-subtitle">
+          Interviews at world-class tech companies
+        </p>
 
-  <div className="companies-slider">
-    <div className="companies-track">
-      <span>Google</span>
-      <span>Microsoft</span>
-      <span>Amazon</span>
-      <span>Meta</span>
-      <span>Apple</span>
-      <span>Adobe</span>
-      <span>Netflix</span>
-      <span>Salesforce</span>
+        <div className="companies-slider">
+          <div className="companies-track">
+            <span>Google</span><span>Microsoft</span><span>Amazon</span>
+            <span>Meta</span><span>Apple</span><span>Adobe</span>
+            <span>Netflix</span><span>Salesforce</span>
+            <span>Google</span><span>Microsoft</span><span>Amazon</span>
+            <span>Meta</span><span>Apple</span><span>Adobe</span>
+            <span>Netflix</span><span>Salesforce</span>
+          </div>
+        </div>
+      </section>
 
-      {/* duplicate for seamless loop */}
-      <span>Google</span>
-      <span>Microsoft</span>
-      <span>Amazon</span>
-      <span>Meta</span>
-      <span>Apple</span>
-      <span>Adobe</span>
-      <span>Netflix</span>
-      <span>Salesforce</span>
-    </div>
-  </div>
-</section>
-
-
-
-      {/* ================= FINAL CTA ================= */}
+      {/* FINAL CTA */}
       <section
         className="final-cta"
         style={{
@@ -218,7 +202,10 @@ const Home = () => {
         }}
       >
         <h2>Ready to Boost Your Interview Skills?</h2>
-        <button className="hero-btn primary" onClick={() => navigate("/roles")}>
+        <button
+          className="hero-btn primary"
+          onClick={() => navigate("/roles")}
+        >
           Start Mock Interview
         </button>
       </section>

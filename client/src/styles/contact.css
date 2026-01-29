@@ -122,6 +122,68 @@
   border: none;
 }
 
+/* ============================== */
+/* ===== LIGHT THEME OVERRIDES === */
+/* ============================== */
+
+body.light .contact-container {
+  background: linear-gradient(135deg, #f3f8fb, #e9f1f6, #ddeaf2);
+  color: #1f2937;
+}
+
+body.light .contact-title {
+  color: #008f7a;
+}
+
+body.light .contact-subtitle {
+  color: #4b5563;
+  opacity: 1;
+}
+
+body.light .contact-card {
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+body.light .contact-card:hover {
+  box-shadow: 0 22px 45px rgba(0, 143, 122, 0.25);
+}
+
+body.light .contact-card h3 {
+  color: #008f7a;
+}
+
+body.light .contact-card p {
+  color: #374151;
+  opacity: 1;
+}
+
+body.light .contact-link {
+  color: #008f7a;
+}
+
+body.light .query-box {
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+}
+
+body.light .query-box h2 {
+  color: #008f7a;
+}
+
+body.light .query-box p {
+  color: #374151;
+  opacity: 1;
+}
+
+body.light .map-section h2 {
+  color: #008f7a;
+}
+
+body.light .map-container {
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+}
+
 /* ===== SMALL DEVICES ===== */
 @media (max-width: 480px) {
   .contact-card {

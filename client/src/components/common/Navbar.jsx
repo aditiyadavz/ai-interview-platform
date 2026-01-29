@@ -1,22 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 import "../../styles/navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const isAuth = localStorage.getItem("isAuthenticated");
 
-  const [darkMode, setDarkMode] = useState(false);
-
-  // Sync icon with body class on load
-  useEffect(() => {
-    setDarkMode(document.body.classList.contains("dark"));
-  }, []);
-
-  const toggleTheme = () => {
-    document.body.classList.toggle("dark");
-    setDarkMode((prev) => !prev);
-  };
+  const { theme, toggleTheme } = useTheme(); // 🌙☀️ global theme
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
@@ -27,19 +17,31 @@ const Navbar = () => {
     <nav className="navbar">
       {/* Logo */}
       <div className="nav-logo">
-        <Link to="/">AI<span>Interview</span></Link>
+        <Link to="/">
+          AI<span>Interview</span>
+        </Link>
       </div>
 
       {/* Right side */}
       <div className="nav-right">
         {/* Navigation links */}
         <ul className="nav-links">
-          <li><NavLink to="/" end>Home</NavLink></li>
-          <li><NavLink to="/roles">Roles</NavLink></li>
-          <li><NavLink to="/contact">Contact</NavLink></li>
+          <li>
+            <NavLink to="/" end>
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/roles">Roles</NavLink>
+          </li>
+          <li>
+            <NavLink to="/contact">Contact</NavLink>
+          </li>
 
           {isAuth && (
-            <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+            <li>
+              <NavLink to="/dashboard">Dashboard</NavLink>
+            </li>
           )}
         </ul>
 
@@ -63,7 +65,7 @@ const Navbar = () => {
 
         {/* 🌙 / ☀️ Theme Toggle */}
         <button className="theme-toggle" onClick={toggleTheme}>
-          {darkMode ? "☀️" : "🌙"}
+          {theme === "dark" ? "☀️" : "🌙"}
         </button>
       </div>
     </nav>

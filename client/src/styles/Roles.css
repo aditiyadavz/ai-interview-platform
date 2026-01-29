@@ -2,6 +2,8 @@
 /* ROLES SECTION STYLING      */
 /* ========================== */
 
+/* ===== DEFAULT (DARK THEME) ===== */
+
 .roles-container {
   min-height: 100vh;
   padding: 80px 6%;
@@ -31,13 +33,12 @@
 /* CARD */
 .role-card {
   background: #1b2a32;
-  border-radius: 18px; /* extra rounded */
+  border-radius: 18px;
   padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 
-  /* Shadow */
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.35),
     0 0 15px rgba(0, 255, 198, 0.1);
@@ -115,7 +116,7 @@
 }
 
 /* ===================== */
-/* GLOSSY WIDE MODAL     */
+/* MODAL (DARK)          */
 /* ===================== */
 
 .modal-overlay {
@@ -135,84 +136,96 @@
 
 .modal-card {
   position: relative;
-
-  /* GLASS EFFECT */
   background: linear-gradient(
     135deg,
     rgba(27,42,50,0.7),
     rgba(15,32,39,0.95)
   );
   backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
   color: #ffffff;
   padding: 28px 48px;
-
-  /* WIDTH & HEIGHT */
   width: min(85%, 700px);
   max-height: 70vh;
-
-  /* SCROLLABLE CONTENT */
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-  scroll-behavior: smooth;
-
-  /* ROUND & SHADOW */
   border-radius: 40px;
   box-shadow:
     0 40px 80px rgba(0, 0, 0, 0.6),
     inset 0 0 0 1px rgba(255, 255, 255, 0.08),
     0 0 40px rgba(0, 255, 198, 0.3);
-
   animation: pop 0.35s ease;
 }
 
-.modal-card::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
-}
-
-/* MODAL SHINE */
-.modal-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    120deg,
-    rgba(255,255,255,0.18),
-    transparent 45%
-  );
-  pointer-events: none;
-}
-
-/* MODAL CONTENT */
-.modal-card h2 {
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-
 .modal-card h4 {
-  margin-top: 16px;
-  margin-bottom: 6px;
   color: #00ffc6;
-  font-size: 15px;
 }
 
-.modal-card p {
-  font-size: 14px;
-  line-height: 1.55;
-  opacity: 0.92;
+/* ========================== */
+/* ===== LIGHT THEME ONLY === */
+/* ========================== */
+
+body.light .roles-container {
+  background: linear-gradient(135deg, #eef3f7, #e4ebf2, #dbe5ee);
+  color: #1a1a1a;
 }
 
-.modal-card ul {
-  padding-left: 18px;
-  font-size: 14px;
-  opacity: 0.95;
+body.light .roles-container p {
+  opacity: 0.7;
 }
 
-.modal-card li {
-  margin-bottom: 5px;
+body.light .role-card {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.12),
+    0 0 0 rgba(0, 0, 0, 0);
+}
+
+body.light .role-card:hover {
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+body.light .role-btn {
+  background: #007c6f;
+  color: #ffffff;
+}
+
+body.light .role-btn:hover {
+  background: #00665b;
+}
+
+body.light .outline-btn {
+  border-color: #007c6f;
+  color: #007c6f;
+}
+
+body.light .outline-btn:hover {
+  background: rgba(0, 124, 111, 0.12);
+}
+
+/* MODAL LIGHT */
+
+body.light .modal-overlay {
+  background: radial-gradient(
+    circle at top,
+    rgba(0,124,111,0.18),
+    rgba(255,255,255,0.9)
+  );
+}
+
+body.light .modal-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.9),
+    rgba(240,245,250,0.95)
+  );
+  color: #1a1a1a;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+body.light .modal-card h4 {
+  color: #007c6f;
 }
 
 /* MOBILE */

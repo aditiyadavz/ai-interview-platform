@@ -589,3 +589,149 @@ body {
     height: 80px;
   }
 }
+/* ================= GLOBAL ================= */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+  background: #ffffff;
+  color: #222;
+}
+
+/* ================= HERO (UNCHANGED) ================= */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 70px 10%;
+  background:
+    radial-gradient(circle at top left, rgba(255, 204, 0, 0.18), transparent 45%),
+    linear-gradient(135deg, #0f2027, #203a43, #2c5364),
+    url("https://images.unsplash.com/photo-1581093588401-12c3be1f8c91?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.hero-content {
+  max-width: 560px;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  margin-bottom: 18px;
+}
+
+.hero-content h1 {
+  font-size: 52px;
+  line-height: 1.15;
+  margin-bottom: 18px;
+}
+
+.hero-content h1 span {
+  color: #ffcc00;
+}
+
+.hero-content p {
+  font-size: 18px;
+  opacity: 0.92;
+  margin-bottom: 32px;
+}
+
+/* ================= FEATURES ================= */
+.features::before {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.features-subtitle {
+  color: #555;
+}
+
+/* ================= COUNTERS ================= */
+.counter-card {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ================= WAVEFORM ================= */
+.waveform-section {
+  background: radial-gradient(circle at top, #e0f7fa, #ffffff);
+}
+
+.waveform-stats div {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ================= TESTIMONIALS ================= */
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ================= FINAL CTA ================= */
+.final-cta {
+  background: linear-gradient(135deg, #203a43, #2c5364);
+}
+
+/* =====================================================
+   🌗 THEME OVERRIDES (ONLY ADDITION – NO CHANGES ABOVE)
+===================================================== */
+
+body.dark {
+  background: #0b0b0b;
+  color: #f5f5f5;
+}
+
+/* Features section */
+body.dark .features::before {
+  background: rgba(10, 15, 20, 0.88);
+}
+
+body.dark .features-subtitle {
+  color: #b0b0b0;
+}
+
+body.dark .feature-card {
+  background: rgba(18, 18, 18, 0.92);
+  color: #f5f5f5;
+}
+
+/* Counters */
+body.dark .counter-card {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Waveform */
+body.dark .waveform-section {
+  background: radial-gradient(circle at top, #020617, #000000);
+}
+
+body.dark .waveform-stats div {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Testimonials */
+body.dark .testimonial-card {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Global text tuning */
+body.dark p {
+  color: #cfcfcf;
+}

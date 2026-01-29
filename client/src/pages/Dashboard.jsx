@@ -30,7 +30,7 @@ const Dashboard = () => {
       <div className="dashboard-container">
         {/* HERO */}
         <div className="dashboard-hero">
-          <h1>Welcome, {userName || "Candidate"} 👋</h1>
+          <h1>Welcome, {userName || "Candidate"}</h1>
           <p>Your AI-powered interview control center</p>
 
           <button className="logout-btn" onClick={handleLogout}>

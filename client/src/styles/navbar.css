@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: space-between;
 
-  background: rgba(15, 32, 39, 0.95);
+  background: var(--bg-secondary);
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 
@@ -19,33 +19,18 @@
   z-index: 1000;
 }
 
-body.dark .features {
-  background: linear-gradient(
-    120deg,
-    #050505,
-    #0f2027,
-    #000
-  );
-}
-
-body.dark .feature-card {
-  background: rgba(18, 18, 18, 0.9);
-  color: #f5f5f5;
-}
-
-
 /* ===============================
    LOGO
 ================================ */
 .nav-logo a {
   font-size: 24px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   text-decoration: none;
 }
 
 .nav-logo span {
-  color: #00e5ff;
+  color: var(--accent);
 }
 
 /* ===============================
@@ -70,7 +55,7 @@ body.dark .feature-card {
 
 .nav-links a {
   text-decoration: none;
-  color: #cfd8dc;
+  color: var(--text-secondary);
   font-size: 15px;
   font-weight: 500;
   position: relative;
@@ -79,7 +64,7 @@ body.dark .feature-card {
 }
 
 .nav-links a:hover {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* underline animation */
@@ -90,7 +75,7 @@ body.dark .feature-card {
   bottom: -6px;
   width: 0%;
   height: 2px;
-  background: #00e5ff;
+  background: var(--accent);
   transition: width 0.3s ease;
 }
 
@@ -101,15 +86,19 @@ body.dark .feature-card {
 
 /* active link */
 .nav-links a.active {
-  color: #00e5ff;
+  color: var(--accent);
 }
 
+/* ===============================
+   THEME TOGGLE
+================================ */
 .theme-toggle {
   background: transparent;
   border: none;
   font-size: 22px;
   cursor: pointer;
   margin-left: 20px;
+  color: var(--text-primary);
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
@@ -117,7 +106,6 @@ body.dark .feature-card {
   transform: rotate(20deg) scale(1.2);
   opacity: 0.85;
 }
-
 
 /* ===============================
    AUTH BUTTONS
@@ -133,10 +121,10 @@ body.dark .feature-card {
   padding: 8px 22px;
   border-radius: 999px;
 
-  border: 1.5px solid #00e5ff;
+  border: 1.5px solid var(--accent);
   background: transparent;
 
-  color: #00e5ff;
+  color: var(--accent);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
@@ -146,8 +134,8 @@ body.dark .feature-card {
 }
 
 .btn-login:hover {
-  background: rgba(0, 229, 255, 0.15);
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+  background: var(--accent-soft);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   transform: translateY(-1px);
 }
 
@@ -156,7 +144,11 @@ body.dark .feature-card {
   padding: 8px 24px;
   border-radius: 999px;
 
-  background: linear-gradient(135deg, #00e5ff, #00bcd4);
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 70%, #000)
+  );
   color: #001a1f;
 
   font-size: 14px;
@@ -166,13 +158,12 @@ body.dark .feature-card {
   border: none;
   cursor: pointer;
 
-  box-shadow: 0 6px 18px rgba(0, 229, 255, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
 }
 
 .btn-signup:hover {
-  background: linear-gradient(135deg, #00f2ff, #00acc1);
-  box-shadow: 0 8px 24px rgba(0, 229, 255, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   transform: translateY(-1px);
 }
 
