@@ -8,8 +8,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
 
   const skillOptions = [
-    "HTML", "CSS", "JavaScript", "C", "C++", "Java", "Python",
-    "React", "Node.js", "Express", "MongoDB", "SQL", "Git", "Docker"
+    "HTML","CSS","JavaScript","React","Node.js","Express",
+    "MongoDB","SQL","Java","Python","C++","Git","Docker",
+    "REST API","Redux","Next.js"
   ];
 
   const [user, setUser] = useState({
@@ -21,13 +22,24 @@ const Profile = () => {
     organization: "",
     linkedin: "",
     github: "",
-    skills: [], // array of selected skills
+    skills: [],
     profilePic: "",
+
+    summary: "",
+    experience: "",
+    projectsText: "",
+    certificationsText: "",
+
+    // NEW ATS FILE SECTIONS
+    offerLetters: [],
+    certificates: [],
+    projectRepos: [] // {name, url}
   });
 
   const [skillInput, setSkillInput] = useState("");
+  const [repoName, setRepoName] = useState("");
+  const [repoUrl, setRepoUrl] = useState("");
 
-  // Load user data
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -37,50 +49,112 @@ const Profile = () => {
       return;
     }
 
-    setUser(prev => ({ ...prev, ...storedUser, skills: storedUser.skills || [] }));
+    setUser(prev => ({
+      ...prev,
+      ...storedUser,
+      skills: storedUser.skills || [],
+      offerLetters: storedUser.offerLetters || [],
+      certificates: storedUser.certificates || [],
+      projectRepos: storedUser.projectRepos || []
+    }));
   }, [navigate]);
 
-  // Handle input change
   const handleChange = e => {
     const { name, value } = e.target;
     setUser(prev => ({ ...prev, [name]: value }));
   };
 
-  // Profile picture upload
+  /* ---------- PROFILE PIC ---------- */
+
   const handleProfilePic = e => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setUser(prev => ({ ...prev, profilePic: reader.result }));
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () =>
+      setUser(prev => ({ ...prev, profilePic: reader.result }));
+    reader.readAsDataURL(file);
   };
 
-  // Add a skill
-  const addSkill = () => {
-    const skill = skillInput.trim();
-    if (skill && !user.skills.includes(skill)) {
-      setUser(prev => ({ ...prev, skills: [...prev.skills, skill] }));
+  /* ---------- FILE UPLOAD GENERIC ---------- */
+
+  const readFiles = (files, key) => {
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setUser(prev => ({
+          ...prev,
+          [key]: [...prev[key], { name: file.name, data: reader.result }]
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeFile = (key, name) => {
+    setUser(prev => ({
+      ...prev,
+      [key]: prev[key].filter(f => f.name !== name)
+    }));
+  };
+
+  /* ---------- SKILLS ---------- */
+
+  const addSkill = skill => {
+    const s = (skill || skillInput).trim();
+    if (s && !user.skills.includes(s)) {
+      setUser(prev => ({ ...prev, skills: [...prev.skills, s] }));
     }
     setSkillInput("");
   };
 
-  // Remove a skill
   const removeSkill = skill => {
-    setUser(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill) }));
+    setUser(prev => ({
+      ...prev,
+      skills: prev.skills.filter(x => x !== skill)
+    }));
   };
 
-  // Save profile
+  /* ---------- PROJECT REPOS ---------- */
+
+  const addRepo = () => {
+    if (!repoName || !repoUrl) return;
+    setUser(prev => ({
+      ...prev,
+      projectRepos: [...prev.projectRepos, { name: repoName, url: repoUrl }]
+    }));
+    setRepoName("");
+    setRepoUrl("");
+  };
+
+  const removeRepo = name => {
+    setUser(prev => ({
+      ...prev,
+      projectRepos: prev.projectRepos.filter(r => r.name !== name)
+    }));
+  };
+
+  /* ---------- SAVE ---------- */
+
+  const normalizeUrl = url =>
+    url && !url.startsWith("http") ? `https://${url}` : url;
+
   const handleSave = () => {
     setLoading(true);
+
+    const updated = {
+      ...user,
+      linkedin: normalizeUrl(user.linkedin),
+      github: normalizeUrl(user.github),
+      skills: user.skills.map(s => s.toLowerCase())
+    };
+
     setTimeout(() => {
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(updated));
       setLoading(false);
-      alert("Profile updated successfully!");
+      alert("Profile saved with ATS documents!");
     }, 500);
   };
 
-  // Handle Enter key for skill input
   const handleKeyDown = e => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -88,77 +162,173 @@ const Profile = () => {
     }
   };
 
+  const suggestedSkills = skillOptions.filter(
+    s =>
+      s.toLowerCase().includes(skillInput.toLowerCase()) &&
+      !user.skills.includes(s)
+  );
+
   return (
     <>
       {loading && <Loader text="Saving profile..." />}
 
-      <div className="profile-container">
-        <div className="profile-hero">
-          <h1>Edit Profile</h1>
-          <p>Update your personal and professional details</p>
+      <div className="profile-page">
+
+        {/* HEADER */}
+        <div className="profile-header">
+          <div className="profile-header-left">
+            <div className="avatar-wrap">
+              {user.profilePic
+                ? <img src={user.profilePic} alt="profile"/>
+                : <div className="avatar-placeholder">👤</div>}
+              <label className="avatar-upload">
+                Change
+                <input hidden type="file" accept="image/*" onChange={handleProfilePic}/>
+              </label>
+            </div>
+
+            <div>
+              <h1>{user.name || "Your Name"}</h1>
+              <p>{user.degree || "Your Title"}</p>
+              <span>{user.email}</span>
+            </div>
+          </div>
+
+          <button className="save-btn" onClick={handleSave}>
+            Save Profile
+          </button>
         </div>
 
-        <div className="profile-card">
+        <div className="profile-sections">
 
-          {/* Profile Picture */}
-          <div className="profile-pic-container">
-            {user.profilePic ? (
-              <img src={user.profilePic} alt="Profile" className="profile-pic" />
-            ) : (
-              <div className="profile-pic-placeholder">👤</div>
-            )}
-            <input type="file" accept="image/*" onChange={handleProfilePic} />
-          </div>
+          <Section title="Professional Summary">
+            <textarea name="summary" rows={4} value={user.summary} onChange={handleChange}/>
+          </Section>
 
-          {/* Personal Info */}
-          <label>Name</label>
-          <input type="text" name="name" value={user.name} onChange={handleChange} />
+          {/* SKILLS */}
+          <Section title="Core Skills">
+            <div className="skills-input">
+              <input value={skillInput} onChange={e => setSkillInput(e.target.value)} onKeyDown={handleKeyDown}/>
+              <button onClick={() => addSkill()}>Add Skills</button>
+            </div>
+            <div className="suggestions">
+              {suggestedSkills.map(s => (
+                <span key={s} onClick={() => addSkill(s)}>{s}</span>
+              ))}
+            </div>
+            <div className="tags">
+              {user.skills.map(skill => (
+                <div key={skill} className="tag">
+                  {skill}
+                  <span onClick={() => removeSkill(skill)}>×</span>
+                </div>
+              ))}
+            </div>
+          </Section>
 
-          <label>Email</label>
-          <input type="email" name="email" value={user.email} onChange={handleChange} />
-
-          <label>Phone Number</label>
-          <input type="text" name="phone" value={user.phone} onChange={handleChange} />
-
-          <label>College / Organization</label>
-          <input type="text" name="college" value={user.college} onChange={handleChange} />
-
-          <label>Degree / Position</label>
-          <input type="text" name="degree" value={user.degree} onChange={handleChange} />
-
-          <label>LinkedIn</label>
-          <input type="text" name="linkedin" value={user.linkedin} onChange={handleChange} />
-
-          <label>GitHub</label>
-          <input type="text" name="github" value={user.github} onChange={handleChange} />
-
-          {/* ====== Skills as Tags ====== */}
-          <label>Skills</label>
-          <div className="skills-tag-input">
-            <input
-              type="text"
-              placeholder="Add a skill and press Enter"
-              value={skillInput}
-              onChange={e => setSkillInput(e.target.value)}
-              onKeyDown={handleKeyDown}
+          {/* WORK EXPERIENCE */}
+          <Section title="Work Experience">
+            <textarea
+              name="experience"
+              rows={5}
+              value={user.experience}
+              onChange={handleChange}
+              placeholder="Role — Company — Duration — Achievements with numbers"
             />
-            <button type="button" onClick={addSkill}>Add</button>
-          </div>
-          <div className="skills-tag-container">
-            {user.skills.map(skill => (
-              <div key={skill} className="skill-tag">
-                {skill}
-                <span className="remove-skill" onClick={() => removeSkill(skill)}>×</span>
+
+            <label className="file-upload">
+              Upload Offer Letters
+              <input hidden type="file" multiple
+                onChange={e => readFiles(e.target.files, "offerLetters")}
+              />
+            </label>
+
+            <FileList
+              files={user.offerLetters}
+              onRemove={name => removeFile("offerLetters", name)}
+            />
+          </Section>
+
+          {/* PROJECTS */}
+          <Section title="Key Projects">
+            <textarea
+              name="projectsText"
+              rows={5}
+              value={user.projectsText}
+              onChange={handleChange}
+              placeholder="Project — Stack — Impact — Metrics"
+            />
+
+            <div className="repo-input">
+              <input
+                placeholder="Project Name"
+                value={repoName}
+                onChange={e => setRepoName(e.target.value)}
+              />
+              <input
+                placeholder="GitHub Repo URL"
+                value={repoUrl}
+                onChange={e => setRepoUrl(e.target.value)}
+              />
+              <button onClick={addRepo}>Add Repo</button>
+            </div>
+
+            {user.projectRepos.map(repo => (
+              <div key={repo.name} className="repo-item">
+                <span>{repo.name}</span>
+                <a href={repo.url} target="_blank">Open</a>
+                <button onClick={() => removeRepo(repo.name)}>Remove</button>
               </div>
             ))}
-          </div>
+          </Section>
 
-          <button onClick={handleSave}>Save Changes</button>
+          {/* CERTIFICATIONS */}
+          <Section title="Certifications">
+            <textarea
+              name="certificationsText"
+              rows={3}
+              value={user.certificationsText}
+              onChange={handleChange}
+            />
+
+            <label className="file-upload">
+              Upload Certificates
+              <input hidden type="file" multiple
+                onChange={e => readFiles(e.target.files, "certificates")}
+              />
+            </label>
+
+            <FileList
+              files={user.certificates}
+              onRemove={name => removeFile("certificates", name)}
+            />
+          </Section>
 
         </div>
       </div>
     </>
   );
 };
+
+/* ---------- SMALL COMPONENTS ---------- */
+
+const Section = ({ title, children }) => (
+  <section>
+    <h2>{title}</h2>
+    {children}
+  </section>
+);
+
+const FileList = ({ files, onRemove }) => (
+  <div className="file-list">
+    {files.map(f => (
+      <div key={f.name} className="file-item">
+        <span>{f.name}</span>
+        <a href={f.data} target="_blank">View</a>
+        <button onClick={() => onRemove(f.name)}>Remove</button>
+      </div>
+    ))}
+  </div>
+);
 
 export default Profile;

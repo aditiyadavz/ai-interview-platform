@@ -1,221 +1,297 @@
-/* ====== FULL PAGE BACKGROUND ====== */
-body,
-html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: #e0f7fa;
-    min-height: 100vh;
+/* =========================
+   THEME VARIABLES
+========================= */
+
+body.dark {
+  --bg-main: #0b1220;
+  --bg-input: #020617;
+  --bg-soft: #1f2937;
+  --bg-soft-hover: #374151;
+  --text-main: #e5e7eb;
+  --text-muted: #64748b;
+  --border-soft: rgba(255,255,255,0.15);
+  --border-strong: rgba(255,255,255,0.18);
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --success: #22c55e;
+  --success-dark: #16a34a;
 }
 
-/* ====== CONTAINER ====== */
-.profile-container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 60px 20px;
+body.light {
+  --bg-main: #f8fafc;
+  --bg-input: #ffffff;
+  --bg-soft: #e5e7eb;
+  --bg-soft-hover: #d1d5db;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-soft: rgba(0,0,0,0.15);
+  --border-strong: rgba(0,0,0,0.18);
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --success: #16a34a;
+  --success-dark: #15803d;
 }
 
-/* ====== HERO SECTION ====== */
-.profile-hero {
-    text-align: center;
-    margin-bottom: 40px;
+/* ===== BASE ===== */
+.profile-page {
+  min-height: 100vh;
+  padding: 40px 6%;
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
-.profile-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+section {
+  margin-bottom: 40px;
 }
 
-.profile-hero p {
-    font-size: 1.2rem;
-    color: #b2ebf2;
+h2 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-soft);
 }
 
-/* ====== PROFILE CARD ====== */
-.profile-card {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 30px 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* ===== HEADER ===== */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
 }
 
-/* ====== PROFILE PICTURE ====== */
-.profile-pic-container {
-    text-align: center;
-    margin-bottom: 20px;
+.profile-header-left {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 
-.profile-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
+/* ===== AVATAR ===== */
+.avatar-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
 }
 
-.profile-pic-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    margin: 0 auto 10px;
+.avatar-wrap img,
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
 }
 
-/* ====== LABELS ====== */
-.profile-card label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #e0f7fa;
+.avatar-upload {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: transparent;
 }
 
-/* ====== INPUT FIELDS ====== */
-.profile-card input[type="text"],
-.profile-card input[type="email"],
-.profile-card input[type="file"] {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: #e0f7fa;
-    font-size: 1rem;
+/* ===== SAVE BUTTON ===== */
+.save-btn {
+  height: 44px;
+  padding: 0 28px;
+  border-radius: 22px;
+   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #ffffff;
+  border: 1px solid #00ff8c;
+  cursor: pointer;
+
+  box-shadow:
+    0 0 14px rgba(0, 255, 140, 0.45),
+    inset 0 0 8px rgba(0, 255, 140, 0.25);
+
+  transition: all 0.25s ease;
 }
 
-.profile-card input::placeholder {
-    color: rgba(224, 247, 250, 0.6);
+.save-btn:hover {
+  box-shadow:
+    0 0 22px rgba(0, 255, 140, 0.75),
+    inset 0 0 14px rgba(0, 255, 140, 0.4);
+  transform: translateY(-2px);
 }
 
-.profile-card input:focus {
-    outline: 2px solid #00bcd4;
-    background: rgba(255, 255, 255, 0.15);
+/* ===== INPUTS & TEXTAREA ===== */
+input,
+textarea {
+  width: 100%;
+  background: var(--bg-input) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 22px;
+  padding: 12px 16px;
+  outline: none;
+  font-size: 14px;
+  border-color: var(--primary);
 }
 
-/* ====== BUTTONS ====== */
-.profile-card button {
-    padding: 12px 20px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #0f2027;
-    background: #00bcd4;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 10px;
+textarea {
+  resize: none;
+  margin-bottom: 18px;
 }
 
-.profile-card button:hover {
-    background: #26c6da;
+/* ===== SKILLS ===== */
+.skills-input {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
-/* ====== SKILLS MULTI-SELECT ====== */
-.skills-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
+.skills-input input,
+.skills-input button {
+  height: 44px;
 }
 
-.skill-option {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 5px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
+.skills-input button {
+  padding: 0 28px;
+  border-radius: 22px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.6);
+  cursor: pointer;
+  box-shadow:
+    0 0 14px rgba(0,255,140,0.4),
+    inset 0 0 6px rgba(0,255,140,0.2);
+
+  transition: all 0.25s ease;
 }
 
-.skill-option input {
-    cursor: pointer;
+.skills-input button:hover {
+  box-shadow:
+    0 0 22px rgba(0,255,140,0.7),
+    inset 0 0 12px rgba(0,255,140,0.4);
 }
 
-.skill-option:hover {
-    background: rgba(0, 188, 212, 0.3);
+/* ===== SKILL SUGGESTIONS ===== */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-/* ====== RESPONSIVE ====== */
-@media (max-width: 768px) {
-    .profile-container {
-        padding: 40px 15px;
-    }
-
-    .profile-hero h1 {
-        font-size: 2rem;
-    }
-
-    .profile-hero p {
-        font-size: 1rem;
-    }
-}
-/* ====== TAG STYLE SKILLS ====== */
-.skills-tag-input {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
+.suggestions span {
+  background: var(--bg-soft);
+  padding: 6px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.4);
+  cursor: pointer;
+  font-size: 13px;
 }
 
-.skills-tag-input input {
-    flex: 1;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: #e0f7fa;
-    font-size: 1rem;
+/* ===== SKILL TAGS ===== */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.skills-tag-input input:focus {
-    outline: 2px solid #00bcd4;
-    background: rgba(255, 255, 255, 0.15);
+.tag {
+  padding: 6px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
 }
 
-.skills-tag-input button {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    background: #00bcd4;
-    color: #0f2027;
-    cursor: pointer;
-    font-weight: 500;
-    transition: 0.3s;
+.tag:hover {
+  background: var(--bg-soft-hover);
 }
 
-.skills-tag-input button:hover {
-    background: #26c6da;
+.tag span {
+  cursor: pointer;
 }
 
-.skills-tag-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+/* ===== FILE UPLOAD ===== */
+.file-upload {
+  display: inline-block;
+  margin: 12px 0 16px;
+  padding: 10px 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.5);
+  cursor: pointer;
 }
 
-.skill-tag {
-    background: rgba(0, 188, 212, 0.3);
-    color: #0f2027;
-    padding: 5px 12px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
+/* ===== FILE LIST ===== */
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.skill-tag .remove-skill {
-    cursor: pointer;
-    font-weight: bold;
-    
-    color: #0f2027;
+.file-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-item button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 6px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+/* ===== REPO INPUT ===== */
+.repo-input {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+}
+
+.repo-input input,
+.repo-input button {
+  height: 44px;
+}
+
+.repo-input button {
+  padding: 0 26px;
+  border-radius: 22px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.6);
+  cursor: pointer;
+
+  box-shadow:
+    0 0 14px rgba(0,255,140,0.4),
+    inset 0 0 6px rgba(0,255,140,0.2);
+
+  transition: all 0.25s ease;
+}
+
+.repo-input button:hover {
+  box-shadow:
+    0 0 22px rgba(0,255,140,0.7),
+    inset 0 0 12px rgba(0,255,140,0.4);
+}
+
+/* ===== REPO ITEM ===== */
+.repo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.repo-item button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 6px 14px;
+  border-radius: 14px;
+  cursor: pointer;
 }
