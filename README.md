@@ -55,12 +55,12 @@ Review previous attempts and performance.
 
 ### ❓ In Action
 
-<img src="client/public/assets/SignUp.pngg" width="200"/>
+<img src="client/public/assets/SignUp.png" width="200"/>
 <img src="client/public/assets/Roles.png" width="200"/>
 <img src="client/public/assets/InterviewSetup.png" width="200"/>
 <img src="client/public/assets/InterviewRoom.png" width="200"/>
 <img src="client/public/assets/Feedback.png" width="200"/>
-<img src="client/public/assets/ScoreCard.png" width="200"/>
+<img src="client/public/assets/InterviewScoreCard.png" width="200"/>
 
 ### ❓ Dashboard
 
