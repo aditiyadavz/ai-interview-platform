@@ -50,22 +50,22 @@ Review previous attempts and performance.
 
 ### 📌 Landing Page
 
-<img src="client/public/assets/LandingPage1.jpeg" width="300"/>
-<img src="client/public/assets/LandingPage2.jpeg" width="300"/>
+<img src="client/public/assets/LandingPage1.png" width="300"/>
+<img src="client/public/assets/LandingPage2.png" width="300"/>
 
 ### ❓ In Action
 
-<img src="client/public/assets/SignUp.jpeg" width="200"/>
-<img src="client/public/assets/Roles.jpeg" width="200"/>
-<img src="client/public/assets/InterviewSetup.jpeg" width="200"/>
-<img src="client/public/assets/InterviewRoom.jpeg" width="200"/>
-<img src="client/public/assets/Feedback.jpeg" width="200"/>
-<img src="client/public/assets/ScoreCard.jpeg" width="200"/>
+<img src="client/public/assets/SignUp.pngg" width="200"/>
+<img src="client/public/assets/Roles.png" width="200"/>
+<img src="client/public/assets/InterviewSetup.png" width="200"/>
+<img src="client/public/assets/InterviewRoom.png" width="200"/>
+<img src="client/public/assets/Feedback.png" width="200"/>
+<img src="client/public/assets/ScoreCard.png" width="200"/>
 
 ### ❓ Dashboard
 
-<img src="client/public/assets/Profile.jpeg" width="200"/>
-<img src="client/public/assets/LightTheme.jpeg" width="200"/>
+<img src="client/public/assets/Profile.png" width="200"/>
+<img src="client/public/assets/LightTheme.png" width="200"/>
 
 ---
 
