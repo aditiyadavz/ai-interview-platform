@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../styles/roles.css";
+import "../styles/Roles.css";
 
 const roles = [
   {
