@@ -70,7 +70,6 @@ export const analyzeAnswer = (text = "") => {
 
   const words     = wordList(text);
   const wc        = words.length;
-  const fullText  = normalize(text);
 
   // ── 1. Length / depth (30 pts) ────────────────────────────────────────────
   const lengthScore =

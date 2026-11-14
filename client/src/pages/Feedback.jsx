@@ -27,7 +27,7 @@ const BulletList = ({ text }) => {
   if (!items.length) return <p className="fb-para">{text}</p>;
   return (
     <ul className="fb-list">
-      {items.map((item, i) => <li key={i}>{item.replace(/^[•\-]\s*/, "")}</li>)}
+      {items.map((item, i) => <li key={i}>{item.replace(/^[•-]\s*/, "")}</li>)}
     </ul>
   );
 };
@@ -84,7 +84,7 @@ const ROLE_LABELS = {
 const Feedback = () => {
   const navigate = useNavigate();
   const { role }  = useParams();
-  const { results, retakeSession, loading } = useInterview();
+  const { results, retakeSession } = useInterview();
 
   const sessionFeedback = results?.sessionFeedback || "";
   const parsed          = parseFeedback(sessionFeedback);

@@ -23,7 +23,7 @@ const ResumeInterviewRoom = () => {
   const interviewId = state?.interviewId;
   const questionsSource = state?.source;
 
-  const { transcript, isRecording, error, permState, startRecording, stopRecording, resetTranscript } =
+  const { transcript, isRecording, error, startRecording, stopRecording, resetTranscript } =
     useRecorder({ echoSuppression: false });
 
   const transcriptRef = useRef("");
@@ -60,7 +60,6 @@ const ResumeInterviewRoom = () => {
   };
 
   const currentPhase = phases[currentIndex];
-  const isFirstOfPhase = currentIndex === 0 || phases[currentIndex - 1] !== currentPhase;
 
   const switchToText = () => { stopRecording(); setInputMode("text"); };
   const switchToSpeech = async () => { setTypedText(""); setInputMode("speech"); await startRecording(); };

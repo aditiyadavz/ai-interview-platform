@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
+import DemoBanner from "./components/common/DemoBanner";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -37,6 +38,7 @@ function App() {
   return (
     <>
       <Navbar />
+      <DemoBanner />
       <Routes>
         {/* Public */}
         <Route path="/"        element={<Home />} />

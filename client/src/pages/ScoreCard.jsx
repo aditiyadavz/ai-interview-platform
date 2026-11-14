@@ -51,7 +51,7 @@ const ScoreRing = ({ score, color }) => {
 const ScoreCard = () => {
   const navigate    = useNavigate();
   const { role }    = useParams();
-  const { results, retakeSession } = useInterview();
+  const { results } = useInterview();
   const [flipped, setFlipped] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shareDone, setShareDone] = useState(false);

@@ -75,7 +75,7 @@ export const useWebRTC = ({ code, as, name, enabled = true }) => {
       pcRef.current.ontrack                    = null;
       pcRef.current.oniceconnectionstatechange = null;
       pcRef.current.onconnectionstatechange    = null;
-      try { pcRef.current.close(); } catch {}
+      try { pcRef.current.close(); } catch { /* best-effort cleanup — safe to ignore */ }
       pcRef.current = null;
     }
 
@@ -152,7 +152,7 @@ export const useWebRTC = ({ code, as, name, enabled = true }) => {
   // ── Drain queued ICE candidates ───────────────────────────────────────────
   const drainCandidates = useCallback(async (pc) => {
     for (const c of pendingCandidates.current) {
-      try { await pc.addIceCandidate(new RTCIceCandidate(c)); } catch {}
+      try { await pc.addIceCandidate(new RTCIceCandidate(c)); } catch { /* best-effort cleanup — safe to ignore */ }
     }
     pendingCandidates.current = [];
   }, []);
@@ -191,6 +191,7 @@ export const useWebRTC = ({ code, as, name, enabled = true }) => {
       // 3. Connect to signaling server
       const socket = io(SIGNALING_URL, {
         path: "/socket.io",
+        auth: { token: localStorage.getItem("token") || undefined },
         transports: ["websocket", "polling"],
         reconnection: true,
         reconnectionAttempts: 10,
@@ -301,7 +302,7 @@ export const useWebRTC = ({ code, as, name, enabled = true }) => {
         if (!candidate) return;
         const pc = pcRef.current;
         if (pc?.remoteDescription?.type) {
-          try { await pc.addIceCandidate(new RTCIceCandidate(candidate)); } catch {}
+          try { await pc.addIceCandidate(new RTCIceCandidate(candidate)); } catch { /* best-effort cleanup — safe to ignore */ }
         } else {
           pendingCandidates.current.push(candidate);
         }
@@ -323,7 +324,7 @@ export const useWebRTC = ({ code, as, name, enabled = true }) => {
       if (pcRef.current) {
         pcRef.current.onicecandidate = null;
         pcRef.current.ontrack        = null;
-        try { pcRef.current.close(); } catch {}
+        try { pcRef.current.close(); } catch { /* best-effort cleanup — safe to ignore */ }
         pcRef.current = null;
       }
       localStreamRef.current?.getTracks().forEach((t) => t.stop());
@@ -374,7 +375,7 @@ export const useWebRTC = ({ code, as, name, enabled = true }) => {
     clearTimeout(iceRestartTimer.current);
     socketRef.current?.disconnect();
     if (pcRef.current) {
-      try { pcRef.current.close(); } catch {}
+      try { pcRef.current.close(); } catch { /* best-effort cleanup — safe to ignore */ }
       pcRef.current = null;
     }
     localStreamRef.current?.getTracks().forEach((t) => t.stop());

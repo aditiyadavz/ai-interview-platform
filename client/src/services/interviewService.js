@@ -1,10 +1,12 @@
 import { api } from "./api";
+import { waitForScoring } from "./waitForScoring";
 
 export const startInterview = ({ role, difficulty, questions }) =>
   api.post("/interview/start", { role, difficulty, questions });
 
-export const submitInterview = (interviewId, answers) =>
-  api.post(`/interview/${interviewId}/submit`, { answers });
+// Resolves with the final score, waiting if the server scores in the background.
+export const submitInterview = async (interviewId, answers) =>
+  waitForScoring(await api.post(`/interview/${interviewId}/submit`, { answers }));
 
 export const fetchHistory = () =>
   api.get("/interview/history");

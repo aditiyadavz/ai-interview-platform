@@ -1,6 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
-import { loginUser } from "../services/authService";
+import { loginUser, demoLogin } from "../services/authService";
 import Loader from "../components/common/Loader";
 import "../styles/auth.css";
 
@@ -38,9 +38,9 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      await loginUser({ email: "demo@aiinterview.dev", password: "DemoPass123" });
+      await demoLogin();
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       setError("Demo account unavailable right now — please try again shortly.");
     } finally {
       setLoading(false);

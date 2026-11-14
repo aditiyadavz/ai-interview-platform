@@ -105,7 +105,37 @@ const finishRoom = async (req, res) => {
       });
     }
 
-    const { candidateAnswers = [], guestUserId = null } = req.body;
+    // ── Who is allowed to finish this room? ──
+    // Logged-in callers must be the room's host or its registered guest
+    // (or claim the empty guest slot). Anonymous callers are only allowed
+    // when they are the guest interviewer of a room with no registered guest.
+    // The client-sent guestUserId is never trusted.
+    const callerId = req.user?._id ? String(req.user._id) : null;
+    const isHost   = callerId && callerId === String(room.host);
+    const isGuest  = callerId && room.guest && callerId === String(room.guest);
+    let guestId    = room.guest || null;
+
+    if (callerId) {
+      if (!isHost && !isGuest) {
+        if (room.guest) return res.status(403).json({ message: "You are not part of this room" });
+        guestId = req.user._id; // logged-in guest claiming the open guest slot
+      }
+    } else if (room.guest || room.hostIsInterviewer) {
+      return res.status(401).json({ message: "Please log in to finish this interview" });
+    }
+
+    // ── Sanitize ratings/notes: one per stored question, rating 0–5 ──
+    const rawAnswers = Array.isArray(req.body.candidateAnswers) ? req.body.candidateAnswers : [];
+    const candidateAnswers = room.questions.map((q, i) => {
+      const a = rawAnswers[i] && typeof rawAnswers[i] === "object" ? rawAnswers[i] : {};
+      const r = Math.round(Number(a.rating));
+      return {
+        questionIndex: i,
+        questionText:  q,
+        notes:         typeof a.notes === "string" ? a.notes.slice(0, 2000) : "",
+        rating:        Number.isFinite(r) ? Math.min(5, Math.max(0, r)) : 0,
+      };
+    });
 
     // ── Compute candidate score from star ratings (1-5 → 0-100) ──
     const rated = candidateAnswers.filter(a => a.rating > 0);
@@ -133,7 +163,7 @@ const finishRoom = async (req, res) => {
     // Build answer objects
     const answers = candidateAnswers.map((a, i) => ({
       questionIndex: i,
-      questionText: a.questionText || room.questions[i] || "",
+      questionText: a.questionText || `Question ${i + 1}`,
       transcript: a.notes || "",
       score: a.rating ? Math.round((a.rating / 5) * 100) : 0,
       confidence: a.rating ? Math.round((a.rating / 5) * 100) : 0,
@@ -144,6 +174,7 @@ const finishRoom = async (req, res) => {
     }));
 
     const hostInterviewBase = {
+      interviewType: "friend",
       role: room.role, difficulty: room.difficulty, company: room.company,
       questions: room.questions, answers,
       totalScore: hostScore, verdict: hostVerdict,
@@ -152,6 +183,7 @@ const finishRoom = async (req, res) => {
     };
 
     const guestInterviewBase = {
+      interviewType: "friend",
       role: room.role, difficulty: room.difficulty, company: room.company,
       questions: room.questions, answers,
       totalScore: guestScore, verdict: guestVerdict,
@@ -167,7 +199,6 @@ const finishRoom = async (req, res) => {
 
     // ── Create Interview doc for guest if they're a registered user ──
     let guestInterviewId = null;
-    const guestId = room.guest || guestUserId;
     if (guestId) {
       const guestInterview = await Interview.create({ ...guestInterviewBase, user: guestId });
       guestInterviewId = guestInterview._id;
@@ -201,6 +232,10 @@ const joinRoomAsUser = async (req, res) => {
   try {
     const room = await FriendInterviewRoom.findOne({ code: req.params.code.toUpperCase() });
     if (!room) return res.status(404).json({ message: "Room not found" });
+    if (String(room.host) === String(req.user._id))
+      return res.status(400).json({ message: "You are the host of this room" });
+    if (room.guest && String(room.guest) !== String(req.user._id))
+      return res.status(403).json({ message: "This room already has a guest" });
     if (!room.guest) {
       room.guest = req.user._id;
       room.guestName = req.user.name || "Guest";

@@ -24,11 +24,24 @@ const interviewSchema = new mongoose.Schema(
     verdict:    { type: String, default: "" },
     aiFeedback: { type: String, default: "" },
     completed:  { type: Boolean, default: false },
-    interviewType: { type: String, enum: ["standard", "resume"], default: "standard" },
+    // "friend" = peer interview room; its scores are human ratings (and a fixed
+    // 100 for the interviewer), so it is excluded from the leaderboard.
+    interviewType: { type: String, enum: ["standard", "resume", "friend"], default: "standard" },
     proctor: {
       violations: { type: Number, default: 0 },
       flagged:    { type: Boolean, default: false },
       log:        [{ type: String }],
+    },
+    // AI scoring lifecycle (services/interviewFinalizer.js). Answers are saved
+    // as "pending" on submit, then scored inline or by the background queue.
+    // Interviews created before this field existed have no status and are
+    // treated as "done" when completed.
+    scoring: {
+      status:     { type: String, enum: ["pending", "done", "failed", null], default: null },
+      error:      { type: String, default: null },
+      startedAt:  { type: Date, default: null },
+      finishedAt: { type: Date, default: null },
+      newlyEarnedBadges: { type: Array, default: [] }, // returned to the client once, for the celebration UI
     },
   },
   { timestamps: true }

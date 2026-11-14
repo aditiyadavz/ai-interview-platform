@@ -178,7 +178,7 @@ const FriendCallRoom = () => {
         setRoleVerified(true);
 
         if (as === "guest" && !registeredToRoom) {
-          try { await joinRoomAsUser(code); setRegisteredToRoom(true); } catch {}
+          try { await joinRoomAsUser(code); setRegisteredToRoom(true); } catch { /* best-effort cleanup — safe to ignore */ }
         }
       })
       .catch(() => {})

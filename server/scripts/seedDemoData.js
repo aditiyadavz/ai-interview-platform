@@ -1,23 +1,31 @@
 /**
- * Seed script — populates (or refreshes) a demo account with realistic
- * interview history so the app looks genuinely used: varied roles, dates
- * spread across several weeks, a believable score progression, a streak,
- * and enough completed interviews to unlock most badges.
+ * Seed script — creates (or refreshes) the shared demo account behind the
+ * "Try the demo" button, with SAMPLE interview history so every page has
+ * something to show: varied roles, dates over several weeks, an upward
+ * score trend, a streak, and enough interviews to unlock most badges.
+ *
+ * The account is flagged `isDemo`, which:
+ *   - lets POST /api/auth/demo log in to it with no password
+ *   - blocks password/profile/resume/testimonial changes (middleware/demoGuard.js)
+ *   - excludes it from the public homepage stats (its data is not real usage)
  *
  * Usage:
  *   cd server
- *   node scripts/seedDemoData.js
+ *   npm run seed            # then set DEMO_LOGIN_ENABLED=true on the server
  *
  * Safe to re-run — it wipes and regenerates ONLY the demo account's own
- * interviews each time, never touches real user data.
+ * interviews (resetting anything visitors did), never real user data.
  */
 require("dotenv").config();
+const crypto = require("crypto");
 const mongoose = require("mongoose");
 const User = require("../src/models/User");
 const Interview = require("../src/models/Interview");
 
 const DEMO_EMAIL = "demo@aiinterview.dev";
-const DEMO_PASSWORD = "DemoPass123";
+// Nobody needs this password (demo login is passwordless and server-side),
+// so it is random on every run — it can't be guessed, shared or changed.
+const randomPassword = () => crypto.randomBytes(24).toString("base64url") + "1a";
 
 const ROLES = ["frontend", "backend", "fullstack", "devops", "datascience", "dsa", "hr"];
 const DIFFICULTIES = ["easy", "medium", "hard"];
@@ -75,20 +83,26 @@ async function seed() {
     user = await User.create({
       name: "Demo Candidate",
       email: DEMO_EMAIL,
-      password: DEMO_PASSWORD,
-      college: "IIT Delhi",
+      password: randomPassword(),
+      isDemo: true,
+      emailVerified: true,
+      college: "Sample University",
       degree: "B.Tech Computer Science",
-      organization: "Self-taught / Open Source",
-      linkedin: "https://linkedin.com/in/demo",
-      github: "https://github.com/demo",
-      summary: "Full-stack developer with a focus on building scalable, user-first web applications. Passionate about clean architecture and continuous learning.",
+      organization: "Sample profile — demo account",
+      linkedin: "",
+      github: "",
+      summary: "(Sample profile for the demo account.) Full-stack developer with a focus on building scalable, user-first web applications. Passionate about clean architecture and continuous learning.",
       skills: ["React", "Node.js", "MongoDB", "TypeScript", "Docker", "AWS", "System Design", "Python"],
       experience: "2 years as a Software Engineer at a mid-size startup, building and scaling internal tools and customer-facing features. Previously interned at a fintech company working on payment infrastructure.",
       projectsText: "Built a real-time collaborative code editor using WebSockets and CRDTs. Led the migration of a monolithic Express app to a microservices architecture, reducing deploy time by 60%. Created an open-source CLI tool for automating changelog generation, used by 500+ developers.",
-      certificationsText: "AWS Certified Solutions Architect – Associate (2025). Meta Front-End Developer Professional Certificate (2024).",
+      certificationsText: "Sample certifications: cloud fundamentals, front-end development.",
     });
-    console.log(`✅ Created demo user: ${DEMO_EMAIL} / ${DEMO_PASSWORD}`);
+    console.log(`✅ Created demo user: ${DEMO_EMAIL}`);
   } else {
+    // Re-assert the demo flag and rotate the password on every run.
+    user.isDemo = true;
+    user.emailVerified = true;
+    user.password = randomPassword();
     console.log(`ℹ️  Demo user already exists — refreshing their interview history`);
   }
 
@@ -145,9 +159,8 @@ async function seed() {
   await user.save();
 
   console.log("✅ Updated streak data");
-  console.log("\n🎉 Done! Log in with:");
-  console.log(`   Email:    ${DEMO_EMAIL}`);
-  console.log(`   Password: ${DEMO_PASSWORD}`);
+  console.log("\n🎉 Done! Set DEMO_LOGIN_ENABLED=true on the server, then use");
+  console.log('   the "Try the demo" button on the login page.');
 
   await mongoose.disconnect();
 }

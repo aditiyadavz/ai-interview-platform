@@ -1,10 +1,11 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const {
-  sendSignupOtp, register, login, getMe,
+  sendSignupOtp, register, login, demoLogin, getMe,
   forgotPassword, resetPassword, changePassword,
 } = require("../controllers/authController");
 const { protect } = require("../middleware/authMiddleware");
+const { blockDemo } = require("../middleware/demoGuard");
 const {
   validateSendOtp, validateRegister, validateLogin,
   validateForgotPassword, validateResetPassword, validateChangePassword,
@@ -24,10 +25,11 @@ const otpLimiter = rateLimit({
 router.post("/send-otp",         otpLimiter, validateSendOtp,        sendSignupOtp);
 router.post("/register",         validateRegister,                   register);
 router.post("/login",            validateLogin,                      login);
+router.post("/demo",                                                 demoLogin);
 router.get("/me",                protect,                            getMe);
 
 router.post("/forgot-password",  otpLimiter, validateForgotPassword, forgotPassword);
 router.post("/reset-password",   validateResetPassword,              resetPassword);
-router.post("/change-password",  protect, validateChangePassword,    changePassword);
+router.post("/change-password",  protect, blockDemo, validateChangePassword, changePassword);
 
 module.exports = router;

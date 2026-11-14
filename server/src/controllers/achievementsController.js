@@ -38,115 +38,111 @@ const getBadges = async (req, res) => {
 };
 
 // ── GET /api/achievements/leaderboard ─────────────────────────────────────────
+// Sessions beyond this count stop adding to rankScore, so the ranking rewards
+// quality over spamming lots of interviews.
+const MAX_RANKED_SESSIONS = 20;
+
+// Friend-room interviews carry human star ratings, and the interviewer is
+// always recorded as 100, so they'd let anyone farm the leaderboard by hosting
+// empty rooms. Legacy friend interviews (before interviewType "friend" existed)
+// are recognised by their generated feedback text.
+const leaderboardMatch = (excludeUserIds) => ({
+  ...completedQuery(),
+  user: { $nin: excludeUserIds },
+  interviewType: { $ne: "friend" },
+  aiFeedback: { $not: /^Friend interview session/ },
+});
+
 const getLeaderboard = async (req, res) => {
   try {
     const currentUserId = req.user._id.toString();
 
-    const interviews = await Interview.find(completedQuery())
-      .select("user totalScore overallScore score verdict role createdAt")
-      .lean();
+    // The shared demo account's history is seeded sample data — never rank it.
+    const demoIds = await User.find({ isDemo: true }).distinct("_id");
 
-    console.log(`[getLeaderboard] total completed interviews: ${interviews.length}`);
+    // Group in MongoDB instead of loading every interview into memory.
+    const grouped = await Interview.aggregate([
+      { $match: leaderboardMatch(demoIds) },
+      {
+        $group: {
+          _id:         "$user",
+          avgScore:    { $avg: { $ifNull: ["$totalScore", 0] } },
+          bestScore:   { $max: { $ifNull: ["$totalScore", 0] } },
+          sessions:    { $sum: 1 },
+          roles:       { $addToSet: "$role" },
+          excellent:   { $sum: { $cond: [{ $eq: ["$verdict", "Excellent"] }, 1, 0] } },
+          good:        { $sum: { $cond: [{ $eq: ["$verdict", "Good"] }, 1, 0] } },
+          lastSession: { $max: "$createdAt" },
+        },
+      },
+    ]);
 
-    if (interviews.length === 0) {
+    if (grouped.length === 0) {
       return res.json({ leaderboard: [], currentUserEntry: null, total: 0 });
     }
 
-    // resolve whichever field holds the numeric score
-    const getScore = (iv) =>
-      typeof iv.totalScore   === "number" ? iv.totalScore   :
-      typeof iv.overallScore === "number" ? iv.overallScore :
-      typeof iv.score        === "number" ? iv.score        : 0;
-
-    // group by user in JS to avoid any ObjectId/string mismatch
-    const grouped = {};
-    for (const iv of interviews) {
-      const uid = iv.user?.toString();
-      if (!uid) continue;
-      if (!grouped[uid]) {
-        grouped[uid] = {
-          uid,
-          scores:      [],
-          sessions:    0,
-          roles:       new Set(),
-          excellent:   0,
-          good:        0,
-          lastSession: null,
-        };
-      }
-      const g = grouped[uid];
-      const s = getScore(iv);
-      g.scores.push(s);
-      g.sessions++;
-      g.roles.add(iv.role);
-      if (iv.verdict === "Excellent") g.excellent++;
-      if (iv.verdict === "Good")      g.good++;
-      if (!g.lastSession || new Date(iv.createdAt) > new Date(g.lastSession))
-        g.lastSession = iv.createdAt;
-    }
-
-    const userIds = Object.keys(grouped);
-    const users   = await User.find({ _id: { $in: userIds } })
+    const users = await User.find({ _id: { $in: grouped.map((g) => g._id) } })
       .select("name profilePic college degree longestStreak currentStreak")
       .lean();
+    const userMap = new Map(users.map((u) => [u._id.toString(), u]));
 
-    const userMap = {};
-    users.forEach(u => { userMap[u._id.toString()] = u; });
+    const ranked = grouped
+      .map((g) => {
+        const uid = g._id.toString();
+        const u = userMap.get(uid);
+        if (!u) return null; // interview whose user was deleted
 
-    const merged = userIds.map(uid => {
-      const g = grouped[uid];
-      const u = userMap[uid];
-      if (!u) return null;
+        const avgScore      = Math.round(g.avgScore);
+        const bestScore     = g.bestScore;
+        const currentStreak = u.currentStreak || 0;
+        const rankedSessions = Math.min(g.sessions, MAX_RANKED_SESSIONS);
+        const rankedExcellent = Math.min(g.excellent, MAX_RANKED_SESSIONS);
+        const rankedGood      = Math.min(g.good, MAX_RANKED_SESSIONS - rankedExcellent);
 
-      const avgScore      = g.scores.length ? Math.round(g.scores.reduce((a, b) => a + b, 0) / g.scores.length) : 0;
-      const bestScore     = g.scores.length ? Math.max(...g.scores) : 0;
-      const totalSessions = g.sessions;
-      const currentStreak = u.currentStreak || 0;
-      const longestStreak = u.longestStreak || 0;
+        const rankScore =
+          avgScore        * 0.5 +
+          bestScore       * 0.2 +
+          rankedSessions  * 2.0 +
+          currentStreak   * 0.3 +
+          rankedExcellent * 3.0 +
+          rankedGood      * 1.5;
 
-      const rankScore =
-        avgScore      * 0.5  +
-        bestScore     * 0.2  +
-        totalSessions * 2.0  +
-        currentStreak * 0.3  +
-        g.excellent   * 3.0  +
-        g.good        * 1.5;
+        return {
+          _id:           uid,
+          name:          u.name,
+          profilePic:    u.profilePic || "",
+          college:       u.college    || "",
+          degree:        u.degree     || "",
+          longestStreak: u.longestStreak || 0,
+          currentStreak,
+          totalSessions: g.sessions,
+          avgScore,
+          bestScore,
+          lastSession:   g.lastSession,
+          uniqueRoles:   g.roles.length,
+          rankScore,
+        };
+      })
+      .filter(Boolean)
+      // Ties: higher average first, then whoever got there earlier.
+      .sort((a, b) =>
+        b.rankScore - a.rankScore ||
+        b.avgScore - a.avgScore ||
+        new Date(a.lastSession) - new Date(b.lastSession)
+      )
+      .map((u, i) => ({
+        ...u,
+        rank:          i + 1,
+        isCurrentUser: u._id === currentUserId,
+        badge:         getBadge(i + 1),
+      }));
 
-      return {
-        _id: uid,
-        name:          u.name,
-        profilePic:    u.profilePic  || "",
-        college:       u.college     || "",
-        degree:        u.degree      || "",
-        longestStreak,
-        currentStreak,
-        totalSessions,
-        avgScore,
-        bestScore,
-        lastSession:   g.lastSession,
-        uniqueRoles:   g.roles.size,
-        rankScore,
-      };
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.rankScore - a.rankScore);
-
-    const ranked = merged.map((u, i) => ({
-      ...u,
-      rank:          i + 1,
-      isCurrentUser: u._id.toString() === currentUserId,
-      badge:         getBadge(i + 1),
-    }));
-
-    const top50            = ranked.slice(0, 50);
-    const totalUsers       = ranked.length;
-    let   currentUserEntry = ranked.find(u => u._id.toString() === currentUserId) || null;
-
+    let currentUserEntry = ranked.find((u) => u.isCurrentUser) || null;
     if (currentUserEntry && currentUserEntry.rank > 50) {
       currentUserEntry = { ...currentUserEntry, outsideTop50: true };
     }
 
-    res.json({ leaderboard: top50, currentUserEntry, total: totalUsers });
+    res.json({ leaderboard: ranked.slice(0, 50), currentUserEntry, total: ranked.length });
   } catch (err) {
     console.error("[getLeaderboard] error:", err);
     res.status(500).json({ message: err.message });

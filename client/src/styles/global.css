@@ -636,3 +636,20 @@ body.light .fr-root::before {
   position: relative;
   z-index: 1;
 }
+
+/* ── Demo account banner (components/common/DemoBanner.jsx) ── */
+.demo-banner {
+  position: relative;
+  z-index: 5;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--border-strong);
+}
+.demo-banner a {
+  color: var(--accent);
+  font-weight: 600;
+}

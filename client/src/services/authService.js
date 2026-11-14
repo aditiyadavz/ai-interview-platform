@@ -20,7 +20,16 @@ export const loginUser = async ({ email, password }) => {
   return data;
 };
 
-export const forgotPassword = ({ email }) => api.post("/auth/forgot-password", { email });
+// One-click login to the shared, read-only demo account (no password needed).
+export const demoLogin = async () => {
+  const data = await api.post("/auth/demo", {});
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
+  localStorage.setItem("isAuthenticated", "true");
+  return data;
+};
+
+export const forgotPassword =({ email }) => api.post("/auth/forgot-password", { email });
 
 export const resetPassword = ({ email, otp, newPassword }) =>
   api.post("/auth/reset-password", { email, otp, newPassword });

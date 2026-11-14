@@ -105,7 +105,6 @@ const Roles = () => {
     return () => { document.body.style.overflow = "auto"; };
   }, [active]);
 
-  const levels = ["All", "Easy", "Beginner – Intermediate", "Intermediate", "Intermediate – Advanced", "Medium – Hard"];
   const filtered = filter === "All" ? roles : roles.filter(r => r.level === filter);
 
   return (

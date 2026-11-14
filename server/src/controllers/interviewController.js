@@ -1,9 +1,6 @@
 const Interview = require("../models/Interview");
 const User = require("../models/User");
-const { generateSessionFeedback } = require("../services/feedbackGenerator");
-const { tagTopic } = require("../utils/topicTagger");
-const { scoreAllAnswers } = require("../services/scoreAnswers");
-const { notify, checkAndNotifyNewBadges } = require("../services/notificationService");
+const { submitAndScore, getResult } = require("./submitHandler");
 
 const startInterview = async (req, res) => {
   try {
@@ -20,95 +17,8 @@ const startInterview = async (req, res) => {
   }
 };
 
-const submitInterview = async (req, res) => {
-  try {
-    const interview = await Interview.findOne({ _id: req.params.id, user: req.user._id });
-    if (!interview) return res.status(404).json({ message: "Interview not found" });
-    if (interview.completed) return res.status(400).json({ message: "Already submitted" });
-
-    const { answers } = req.body;
-
-    // AI-score each answer using Gemini (falls back to client score if transcript empty)
-    const aiScores = await scoreAllAnswers(answers);
-
-    interview.answers = answers.map((a, i) => ({
-      ...a,
-      score: aiScores[i],
-      topic: tagTopic(a.questionText),
-    }));
-    interview.completed = true;
-
-    const totalScore = Math.round(
-      aiScores.reduce((sum, s) => sum + s, 0) / aiScores.length
-    );
-    interview.totalScore = totalScore;
-    interview.verdict =
-      totalScore >= 85 ? "Excellent" :
-      totalScore >= 70 ? "Good" :
-      totalScore >= 50 ? "Average" : "Needs Work";
-
-    interview.aiFeedback = await generateSessionFeedback(interview.role, answers, totalScore);
-    await interview.save();
-
-    // ── Update streak ──────────────────────────────────────────────────────
-    const user = await User.findById(req.user._id);
-    if (user) {
-      const today     = new Date();
-      const todayKey  = today.toDateString();
-      const lastKey   = user.lastInterviewDate
-        ? new Date(user.lastInterviewDate).toDateString()
-        : null;
-
-      if (lastKey !== todayKey) {
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-        const wasYesterday = lastKey === yesterday.toDateString();
-        user.currentStreak = wasYesterday ? user.currentStreak + 1 : 1;
-        user.longestStreak = Math.max(user.longestStreak || 0, user.currentStreak);
-        user.lastInterviewDate = today;
-        await user.save();
-      }
-    }
-
-    // ── Check newly earned badges (only truly NEW ones get a notification —
-    //    already-earned badges are never re-notified, tracked via
-    //    user.notifiedBadgeIds) ──────────────────────────────────────────────
-    let newlyEarnedBadges = [];
-    try {
-      const allInterviews = await Interview.find({ user: req.user._id, completed: true })
-        .sort({ createdAt: 1 });
-      const freshUser = await User.findById(req.user._id);
-      const { newlyEarned } = await checkAndNotifyNewBadges({ user: freshUser, interviews: allInterviews });
-      newlyEarnedBadges = newlyEarned.map(b => ({
-        id: b.id, name: b.name, icon: b.icon, tier: b.tier, color: b.color,
-      }));
-    } catch (badgeErr) {
-      console.error("Badge check failed:", badgeErr.message);
-    }
-
-    // ── Certificate-earned notification (score threshold met) ──────────────
-    if (totalScore >= 70) {
-      notify({
-        userId: req.user._id,
-        type: "certificate_earned",
-        icon: "🎓",
-        title: "Certificate unlocked",
-        text: `You scored ${totalScore}% — your certificate for this interview is ready to download.`,
-        link: `/achievements`,
-      });
-    }
-
-    res.json({
-      message:           "Interview submitted",
-      totalScore:        interview.totalScore,
-      verdict:           interview.verdict,
-      aiFeedback:        interview.aiFeedback,
-      newlyEarnedBadges,                         // ← sent to client for celebration UI
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// Scoring, streaks, badges and notifications live in services/interviewFinalizer.js
+const submitInterview = (req, res) => submitAndScore(req, res);
 
 const getHistory = async (req, res) => {
   try {
@@ -200,4 +110,4 @@ const getProgress = async (req, res) => {
   }
 };
 
-module.exports = { startInterview, submitInterview, getHistory, getInterview, getProgress };
+module.exports = { startInterview, submitInterview, getResult, getHistory, getInterview, getProgress };

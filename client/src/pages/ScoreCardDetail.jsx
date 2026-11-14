@@ -75,7 +75,7 @@ const BulletList = ({ text }) => {
   if (!items.length) return <p className="fb-para">{text}</p>;
   return (
     <ul className="fb-list">
-      {items.map((item, i) => <li key={i}>{item.replace(/^[•\-]\s*/, "")}</li>)}
+      {items.map((item, i) => <li key={i}>{item.replace(/^[•-]\s*/, "")}</li>)}
     </ul>
   );
 };

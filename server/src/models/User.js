@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     email:                { type: String, required: true, unique: true, lowercase: true, trim: true },
     password:             { type: String, required: true, minlength: 6 },
     emailVerified:        { type: Boolean, default: false }, // set true only after OTP verification at signup
+    isDemo:               { type: Boolean, default: false }, // shared public demo account — see middleware/demoGuard.js
     notifiedBadgeIds:     { type: [String], default: [] },   // badge ids already notified — prevents re-notifying on every interview
     phone:                { type: String, default: "" },
     college:              { type: String, default: "" },

@@ -28,7 +28,7 @@ const useRecorder = ({ echoSuppression = true } = {}) => {
 
     recog.onend = () => {
       if (activeRef.current) {
-        try { recog.start(); } catch {}
+        try { recog.start(); } catch { /* best-effort cleanup — safe to ignore */ }
       }
     };
 
@@ -65,7 +65,7 @@ const useRecorder = ({ echoSuppression = true } = {}) => {
       setPermState("granted");
       setError(null);
       return true;
-    } catch (err) {
+    } catch {
       setPermState("denied");
       setError("Microphone access denied. Allow mic access in your browser settings and refresh.");
       return false;
@@ -83,7 +83,7 @@ const useRecorder = ({ echoSuppression = true } = {}) => {
     }
 
     if (recognitionRef.current) {
-      try { recognitionRef.current.abort(); } catch {}
+      try { recognitionRef.current.abort(); } catch { /* best-effort cleanup — safe to ignore */ }
     }
 
     const recog = buildRecognition();
@@ -100,7 +100,7 @@ const useRecorder = ({ echoSuppression = true } = {}) => {
 
   const stopRecording = () => {
     activeRef.current = false;
-    try { recognitionRef.current?.abort(); } catch {}
+    try { recognitionRef.current?.abort(); } catch { /* best-effort cleanup — safe to ignore */ }
     recognitionRef.current = null;
     setIsRecording(false);
   };
@@ -110,7 +110,7 @@ const useRecorder = ({ echoSuppression = true } = {}) => {
   useEffect(() => {
     return () => {
       activeRef.current = false;
-      try { recognitionRef.current?.abort(); } catch {}
+      try { recognitionRef.current?.abort(); } catch { /* best-effort cleanup — safe to ignore */ }
     };
   }, []);
 

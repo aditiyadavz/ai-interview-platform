@@ -78,9 +78,21 @@ const contactLimiter = rateLimit({
   message: { message: "Too many messages sent — please wait a while before sending another." },
 });
 
+// TURN credentials are public (anonymous guests need them) — cap per IP so
+// the relay can't be farmed for bandwidth.
+const turnLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many requests — please try again shortly." },
+});
+
 app.get("/", (req, res) => res.json({ status: "API running ✅" }));
 
 app.use("/api/auth",          authLimiter, authRoutes);
+// Submitting an interview makes one Gemini call per answer plus one for feedback
+app.use("/api/interview/:id/submit", aiLimiter);
 app.use("/api/interview",     interviewRoutes);
 app.use("/api/ai",            aiLimiter, aiRoutes);
 app.use("/api/user",          userRoutes);
@@ -89,7 +101,7 @@ app.use("/api/upload",        uploadRoutes);
 app.use("/api/friend-room",   friendRoomRoutes);
 app.use("/api/reminders",     emailReminderRoutes);
 app.use("/api/achievements",  achievementsRoutes);   // ← NEW
-app.use("/api/turn",          turnRoutes);
+app.use("/api/turn",          turnLimiter, turnRoutes);
 app.use("/api/resume-interview", aiLimiter, resumeInterviewRoutes);   // ← NEW
 app.use("/api/stats",         statsRoutes);          // ← NEW
 app.use("/api/testimonials",  testimonialRoutes);    // ← NEW

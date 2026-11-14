@@ -299,7 +299,7 @@ function LeaderboardPanel() {
 export default function Achievements() {
   const [activeTab,  setActiveTab]  = useState("badges");
   const [badges,     setBadges]     = useState([]);
-  const [interviews, setInterviews] = useState([]);
+  const [interviews] = useState([]);
   const [stats,      setStats]      = useState(null);
   const [loading,    setLoading]    = useState(true);
 

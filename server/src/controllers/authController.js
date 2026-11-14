@@ -71,7 +71,7 @@ const login = async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ message: "Email and password are required" });
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: String(email).toLowerCase().trim() });
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
     const isMatch = await user.matchPassword(password);
@@ -86,8 +86,30 @@ const login = async (req, res) => {
   }
 };
 
+// One-click login to the shared demo account, so recruiters can look around
+// without signing up. No password is involved: the server picks the account
+// flagged isDemo, which demoGuard keeps read-only for sensitive actions.
+// Disabled unless DEMO_LOGIN_ENABLED=true.
+const demoLogin = async (req, res) => {
+  try {
+    if (process.env.DEMO_LOGIN_ENABLED !== "true")
+      return res.status(404).json({ message: "Demo login is not enabled" });
+
+    const user = await User.findOne({ isDemo: true });
+    if (!user)
+      return res.status(503).json({ message: "Demo account unavailable right now" });
+
+    res.json({
+      token: generateToken(user._id),
+      user: { _id: user._id, name: user.name, email: user.email, isDemo: true },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getMe = async (req, res) => {
-  res.json({ _id: req.user._id, name: req.user.name, email: req.user.email });
+  res.json({ _id: req.user._id, name: req.user.name, email: req.user.email, isDemo: !!req.user.isDemo });
 };
 
 // Step 1 of password reset: email a code IF the account exists. Always returns
@@ -101,7 +123,7 @@ const forgotPassword = async (req, res) => {
     const normalizedEmail = String(email).toLowerCase().trim();
     const user = await User.findOne({ email: normalizedEmail });
 
-    if (user) {
+    if (user && !user.isDemo) {
       try {
         await sendOtp({ email: normalizedEmail, name: user.name, purpose: "reset" });
       } catch (sendError) {
@@ -128,7 +150,7 @@ const resetPassword = async (req, res) => {
 
     const normalizedEmail = String(email).toLowerCase().trim();
     const user = await User.findOne({ email: normalizedEmail });
-    if (!user) return res.status(400).json({ message: "Invalid or expired code" });
+    if (!user || user.isDemo) return res.status(400).json({ message: "Invalid or expired code" });
 
     const result = await verifyOtp({ email: normalizedEmail, purpose: "reset", code: otp });
     if (!result.valid)
@@ -188,6 +210,6 @@ const changePassword = async (req, res) => {
 };
 
 module.exports = {
-  sendSignupOtp, register, login, getMe,
+  sendSignupOtp, register, login, demoLogin, getMe,
   forgotPassword, resetPassword, changePassword,
 };
